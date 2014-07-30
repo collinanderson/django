@@ -423,13 +423,13 @@ class Options(object):
             for field, names in six.iteritems(self.get_fields(m2m=m2m, data=data,
                   related_objects=related_objects, related_m2m=related_m2m,
                   virtual=virtual, export_name_map=True)):
-                # Map each possible name for a field to it's field instance
+                # Map each possible name for a field to its field instance
                 for name in names:
                     res[name] = field
 
             field_map = self._get_field_cache[cache_key] = res
         try:
-            # Retreive field instance by name from cached or just-computer field map
+            # Retreive field instance by name from cached or just-computed field map
             return field_map[field_name]
         except KeyError:
             raise FieldDoesNotExist('%s has no field named %r' % (self.object_name, field_name))
@@ -484,13 +484,13 @@ class Options(object):
                 for parent in self.parents:
                     for obj, query_name in six.iteritems(parent._meta.get_fields(data=False, related_m2m=True,
                                                          **options)):
-                        # In order for a related M2M object to be valid, it's creation
+                        # In order for a related M2M object to be valid, its creation
                         # counter must be > 0 and must be in the parent list
                         if not (obj.field.creation_counter < 0
                                 and obj.model not in self.get_parent_list()):
                             fields[obj] = query_name
 
-            # Tree is computer once and cached until apps cache is expired. It is composed of
+            # Tree is computed once and cached until apps cache is expired. It is composed of
             # { options_instance : [field_pointing_to_options_model, field_pointing_to_options, ..]}
             # If the model is a proxy model, then we also add the concrete model.
             tree = self.apps.related_m2m_relation_graph
@@ -514,7 +514,7 @@ class Options(object):
                                 # is not intentionally hidden, add to the fields dict
                                 fields[obj] = query_name
 
-            # Tree is computer once and cached until apps cache is expired. It is composed of
+            # Tree is computed once and cached until apps cache is expired. It is composed of
             # { options_instance : [field_pointing_to_options_model, field_pointing_to_options, ..]}
             # If the model is a proxy model, then we also add the concrete model.
             tree, proxy_tree = self.apps.related_objects_relation_graph
@@ -588,7 +588,7 @@ class Options(object):
     def many_to_many(self):
         """
         Returns a list of all many to many fields on the model and
-        it's parents.
+        its parents.
         All hidden and proxy fields are omitted.
         """
         return self.get_fields(data=False, m2m=True)
@@ -609,7 +609,7 @@ class Options(object):
     @cached_property
     def fields(self):
         """
-        Returns a list of all data fields on the model and it's parents.
+        Returns a list of all data fields on the model and its parents.
         All hidden and proxy fields are omitted.
         """
         return self.get_fields()
@@ -617,7 +617,7 @@ class Options(object):
     @cached_property
     def concrete_fields(self):
         """
-        Returns a list of all concrete data fields on the model and it's parents.
+        Returns a list of all concrete data fields on the model and its parents.
         All hidden and proxy fields are omitted.
         """
         return self.get_fields(include_non_concrete=False)
