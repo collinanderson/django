@@ -14,7 +14,7 @@ from django.conf import settings
 from django.conf.locale import LANG_INFO
 from django.core.exceptions import AppRegistryNotReady
 from django.dispatch import receiver
-from django.test.signals import setting_changed
+from django.core.signals import setting_changed
 from django.utils.deprecation import RemovedInDjango19Warning
 from django.utils.encoding import force_text
 from django.utils._os import upath
