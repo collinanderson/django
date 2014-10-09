@@ -6,7 +6,6 @@ import copy
 import datetime
 import decimal
 import math
-import uuid
 import warnings
 from base64 import b64decode, b64encode
 from itertools import tee
@@ -2236,6 +2235,7 @@ class UUIDField(Field):
         return "UUIDField"
 
     def get_prep_value(self, value):
+        import uuid
         if isinstance(value, uuid.UUID):
             return value.hex
         if isinstance(value, six.string_types):
@@ -2243,6 +2243,7 @@ class UUIDField(Field):
         return value
 
     def to_python(self, value):
+        import uuid
         if value and not isinstance(value, uuid.UUID):
             try:
                 return uuid.UUID(value)

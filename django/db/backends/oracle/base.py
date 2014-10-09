@@ -10,7 +10,6 @@ import decimal
 import re
 import platform
 import sys
-import uuid
 import warnings
 
 
@@ -330,6 +329,7 @@ WHEN (new.%(col_name)s IS NULL)
 
     def convert_uuidfield_value(self, value, field):
         if value is not None:
+            import uuid
             value = uuid.UUID(value)
         return value
 

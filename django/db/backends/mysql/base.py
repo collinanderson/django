@@ -9,7 +9,6 @@ from __future__ import unicode_literals
 import datetime
 import re
 import sys
-import uuid
 import warnings
 
 try:
@@ -413,6 +412,7 @@ class DatabaseOperations(BaseDatabaseOperations):
 
     def convert_uuidfield_value(self, value, field):
         if value is not None:
+            import uuid
             value = uuid.UUID(value)
         return value
 

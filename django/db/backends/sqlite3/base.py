@@ -9,7 +9,6 @@ from __future__ import unicode_literals
 import datetime
 import decimal
 import re
-import uuid
 import warnings
 
 from django.conf import settings
@@ -300,6 +299,7 @@ class DatabaseOperations(BaseDatabaseOperations):
 
     def convert_uuidfield_value(self, value, field):
         if value is not None:
+            import uuid
             value = uuid.UUID(value)
         return value
 

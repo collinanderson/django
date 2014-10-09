@@ -9,7 +9,6 @@ import datetime
 import os
 import re
 import sys
-import uuid
 import warnings
 from decimal import Decimal, DecimalException
 from io import BytesIO
@@ -1233,6 +1232,7 @@ class UUIDField(CharField):
     }
 
     def prepare_value(self, value):
+        import uuid
         if isinstance(value, uuid.UUID):
             return value.hex
         return value
@@ -1241,6 +1241,7 @@ class UUIDField(CharField):
         value = super(UUIDField, self).to_python(value)
         if value in self.empty_values:
             return None
+        import uuid
         if not isinstance(value, uuid.UUID):
             try:
                 value = uuid.UUID(value)
