@@ -8,7 +8,6 @@ from django.conf import settings
 from django.utils.deprecation import RemovedInNextVersionWarning
 from django.utils.encoding import force_text
 from django.utils.module_loading import import_string
-from django.views.debug import ExceptionReporter, get_exception_reporter_filter
 
 # Imports kept for backwards-compatibility in Django 1.7.
 from logging import NullHandler  # NOQA
@@ -98,6 +97,7 @@ class AdminEmailHandler(logging.Handler):
         self.email_backend = email_backend
 
     def emit(self, record):
+        from django.views.debug import ExceptionReporter, get_exception_reporter_filter
         try:
             request = record.request
             subject = '%s (%s IP): %s' % (
