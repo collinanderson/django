@@ -6,7 +6,6 @@ from django.core.exceptions import ValidationError
 from django.utils.deconstruct import deconstructible
 from django.utils.translation import ugettext_lazy as _, ungettext_lazy
 from django.utils.encoding import force_text
-from django.utils.ipv6 import is_valid_ipv6_address
 from django.utils import six
 from django.utils.six.moves.urllib.parse import urlsplit, urlunsplit
 
@@ -200,6 +199,7 @@ validate_ipv4_address = RegexValidator(ipv4_re, _('Enter a valid IPv4 address.')
 
 
 def validate_ipv6_address(value):
+    from django.utils.ipv6 import is_valid_ipv6_address
     if not is_valid_ipv6_address(value):
         raise ValidationError(_('Enter a valid IPv6 address.'), code='invalid')
 

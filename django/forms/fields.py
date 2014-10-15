@@ -24,7 +24,6 @@ from django.forms.widgets import (
 )
 from django.utils import formats
 from django.utils.encoding import smart_text, force_str, force_text
-from django.utils.ipv6 import clean_ipv6_address
 from django.utils.deprecation import RemovedInDjango19Warning, RemovedInDjango20Warning, RenameMethodsBase
 from django.utils import six
 from django.utils.six.moves.urllib.parse import urlsplit, urlunsplit
@@ -1214,6 +1213,7 @@ class GenericIPAddressField(CharField):
             return ''
         value = value.strip()
         if value and ':' in value:
+            from django.utils.ipv6 import clean_ipv6_address
             return clean_ipv6_address(value, self.unpack_ipv4)
         return value
 

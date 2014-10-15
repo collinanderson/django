@@ -26,7 +26,6 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import (smart_text, force_text, force_bytes,
     python_2_unicode_compatible)
-from django.utils.ipv6 import clean_ipv6_address
 from django.utils import six
 from django.utils.itercompat import is_iterable
 
@@ -1844,6 +1843,7 @@ class GenericIPAddressField(Field):
 
     def to_python(self, value):
         if value and ':' in value:
+            from django.utils.ipv6 import clean_ipv6_address
             return clean_ipv6_address(value,
                 self.unpack_ipv4, self.error_messages['invalid'])
         return value
@@ -1858,6 +1858,7 @@ class GenericIPAddressField(Field):
         if value is None:
             return None
         if value and ':' in value:
+            from django.utils.ipv6 import clean_ipv6_address
             try:
                 return clean_ipv6_address(value, self.unpack_ipv4)
             except exceptions.ValidationError:
