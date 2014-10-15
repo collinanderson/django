@@ -122,3 +122,46 @@ else:
             self.handle_endtag(tag.lower())
             self.clear_cdata_mode()
             return j
+
+
+class MLStripper(HTMLParser):
+    def __init__(self):
+        # The strict parameter was added in Python 3.2 with a default of True.
+        # The default changed to False in Python 3.3 and was deprecated.
+        if sys.version_info[:2] == (3, 2):
+            HTMLParser.__init__(self, strict=False)
+        else:
+            HTMLParser.__init__(self)
+        self.reset()
+        self.fed = []
+
+    def handle_data(self, d):
+        self.fed.append(d)
+
+    def handle_entityref(self, name):
+        self.fed.append('&%s;' % name)
+
+    def handle_charref(self, name):
+        self.fed.append('&#%s;' % name)
+
+    def get_data(self):
+        return ''.join(self.fed)
+
+
+def _strip_once(value):
+    """
+    Internal tag stripping utility used by strip_tags.
+    """
+    s = MLStripper()
+    try:
+        s.feed(value)
+    except HTMLParseError:
+        return value
+    try:
+        s.close()
+    except (HTMLParseError, UnboundLocalError):
+        # UnboundLocalError because of http://bugs.python.org/issue17802
+        # on Python 3.2, triggered by strict=False mode of HTMLParser
+        return s.get_data() + s.rawdata
+    else:
+        return s.get_data()
