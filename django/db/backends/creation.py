@@ -1,4 +1,3 @@
-import hashlib
 import sys
 import time
 
@@ -58,6 +57,7 @@ class BaseDatabaseCreation(object):
         Generates a 32-bit digest of a set of arguments that can be used to
         shorten identifying names.
         """
+        import hashlib
         h = hashlib.md5()
         for arg in args:
             h.update(force_bytes(arg))

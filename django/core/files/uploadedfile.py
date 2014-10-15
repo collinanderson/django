@@ -8,7 +8,6 @@ from io import BytesIO
 
 from django.conf import settings
 from django.core.files.base import File
-from django.core.files import temp as tempfile
 from django.utils.encoding import force_str
 
 __all__ = ('UploadedFile', 'TemporaryUploadedFile', 'InMemoryUploadedFile',
@@ -61,6 +60,7 @@ class TemporaryUploadedFile(UploadedFile):
     A file uploaded to a temporary location (i.e. stream-to-disk).
     """
     def __init__(self, name, content_type, size, charset, content_type_extra=None):
+        from django.core.files import temp as tempfile
         if settings.FILE_UPLOAD_TEMP_DIR:
             file = tempfile.NamedTemporaryFile(suffix='.upload',
                 dir=settings.FILE_UPLOAD_TEMP_DIR)

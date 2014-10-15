@@ -18,7 +18,6 @@ An example: i18n middleware would need to distinguish caches by the
 """
 from __future__ import unicode_literals
 
-import hashlib
 import re
 import time
 
@@ -99,6 +98,7 @@ def get_max_age(response):
 
 def _set_response_etag(response):
     if not response.streaming:
+        import hashlib
         response['ETag'] = '"%s"' % hashlib.md5(response.content).hexdigest()
     return response
 
@@ -186,6 +186,7 @@ def _i18n_cache_key_suffix(request, cache_key):
 
 def _generate_cache_key(request, method, headerlist, key_prefix):
     """Returns a cache key from the headers given in the header list."""
+    import hashlib
     ctx = hashlib.md5()
     for header in headerlist:
         value = request.META.get(header, None)
@@ -199,6 +200,7 @@ def _generate_cache_key(request, method, headerlist, key_prefix):
 
 def _generate_cache_header_key(key_prefix, request):
     """Returns a cache key for the header cache."""
+    import hashlib
     url = hashlib.md5(force_bytes(iri_to_uri(request.build_absolute_uri())))
     cache_key = 'views.decorators.cache.cache_header.%s.%s' % (
         key_prefix, url.hexdigest())

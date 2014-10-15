@@ -1,4 +1,3 @@
-import hashlib
 import operator
 
 from django.db.backends.creation import BaseDatabaseCreation
@@ -794,6 +793,7 @@ class BaseDatabaseSchemaEditor(object):
             index_name = index_name[1:]
         # If it's STILL too long, just hash it down
         if len(index_name) > max_length:
+            import hashlib
             index_name = hashlib.md5(force_bytes(index_name)).hexdigest()[:max_length]
         # It can't start with a number on Oracle, so prepend D if we need to
         if index_name[0].isdigit():

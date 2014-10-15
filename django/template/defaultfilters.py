@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 
 import re
-import random as random_module
 from functools import wraps
 import warnings
 
@@ -593,6 +592,7 @@ def length_is(value, arg):
 @register.filter(is_safe=True)
 def random(value):
     """Returns a random item from the list."""
+    import random as random_module
     return random_module.choice(value)
 
 

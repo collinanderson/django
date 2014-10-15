@@ -1,7 +1,6 @@
 import os
 import stat
 import sys
-import tempfile
 from os.path import join, normcase, normpath, abspath, isabs, sep, dirname
 
 from django.utils.encoding import force_text
@@ -108,6 +107,7 @@ def symlinks_supported():
     host platform and/or if they are allowed to be created (e.g.
     on Windows it requires admin permissions).
     """
+    import tempfile
     tmpdir = tempfile.mkdtemp()
     original_path = os.path.join(tmpdir, 'original')
     symlink_path = os.path.join(tmpdir, 'symlink')
