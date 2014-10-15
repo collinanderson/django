@@ -7,9 +7,6 @@ import string
 
 from django.conf import settings
 from django.core.exceptions import SuspiciousOperation
-from django.utils.crypto import constant_time_compare
-from django.utils.crypto import get_random_string
-from django.utils.crypto import salted_hmac
 from django.utils import timezone
 from django.utils.encoding import force_bytes, force_text
 from django.utils.module_loading import import_string
@@ -82,6 +79,7 @@ class SessionBase(object):
 
     def _hash(self, value):
         key_salt = "django.contrib.sessions" + self.__class__.__name__
+        from django.utils.crypto import salted_hmac
         return salted_hmac(key_salt, value).hexdigest()
 
     def encode(self, session_dict):
@@ -92,6 +90,7 @@ class SessionBase(object):
 
     def decode(self, session_data):
         encoded_data = base64.b64decode(force_bytes(session_data))
+        from django.utils.crypto import constant_time_compare
         try:
             # could produce ValueError if there is no ':'
             hash, serialized = encoded_data.split(b':', 1)
@@ -151,6 +150,7 @@ class SessionBase(object):
 
     def _get_new_session_key(self):
         "Returns session key that isn't being used."
+        from django.utils.crypto import get_random_string
         while True:
             session_key = get_random_string(32, VALID_KEY_CHARS)
             if not self.exists(session_key):

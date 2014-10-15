@@ -14,8 +14,6 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.models import User
-from django.contrib.auth.hashers import UNUSABLE_PASSWORD_PREFIX, identify_hasher
-from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 
 
@@ -33,6 +31,7 @@ class ReadOnlyPasswordHashWidget(forms.Widget):
         encoded = value
         final_attrs = self.build_attrs(attrs)
 
+        from django.contrib.auth.hashers import UNUSABLE_PASSWORD_PREFIX, identify_hasher
         if not encoded or encoded.startswith(UNUSABLE_PASSWORD_PREFIX):
             summary = mark_safe("<strong>%s</strong>" % ugettext("No password set."))
         else:
@@ -235,12 +234,14 @@ class PasswordResetForm(forms.Form):
     def save(self, domain_override=None,
              subject_template_name='registration/password_reset_subject.txt',
              email_template_name='registration/password_reset_email.html',
-             use_https=False, token_generator=default_token_generator,
+             use_https=False, token_generator=None,
              from_email=None, request=None, html_email_template_name=None):
         """
         Generates a one-use only link for resetting password and sends to the
         user.
         """
+        if not token_generator:
+            from django.contrib.auth.tokens import default_token_generator as token_generator
         email = self.cleaned_data["email"]
         for user in self.get_users(email):
             if not domain_override:

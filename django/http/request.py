@@ -8,7 +8,6 @@ from io import BytesIO
 from itertools import chain
 
 from django.conf import settings
-from django.core import signing
 from django.core.exceptions import DisallowedHost, ImproperlyConfigured
 from django.core.files import uploadhandler
 from django.http.multipartparser import MultiPartParser, MultiPartParserError
@@ -114,6 +113,7 @@ class HttpRequest(object):
                 return default
             else:
                 raise
+        from django.core import signing
         try:
             value = signing.get_cookie_signer(salt=key + salt).unsign(
                 cookie_value, max_age=max_age)

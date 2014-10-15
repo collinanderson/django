@@ -7,7 +7,6 @@ import time
 
 from django.conf import settings
 from django.core import signals
-from django.core import signing
 from django.core.exceptions import DisallowedRedirect
 from django.http.cookie import SimpleCookie
 from django.utils import six, timezone
@@ -270,6 +269,7 @@ class HttpResponseBase(six.Iterator):
             self.cookies[key]['httponly'] = True
 
     def set_signed_cookie(self, key, value, salt='', **kwargs):
+        from django.core import signing
         value = signing.get_cookie_signer(salt=key + salt).sign(value)
         return self.set_cookie(key, value, **kwargs)
 

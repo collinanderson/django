@@ -4,14 +4,11 @@ from django.core.exceptions import PermissionDenied
 from django.core import validators
 from django.db import models
 from django.db.models.manager import EmptyManager
-from django.utils.crypto import get_random_string, salted_hmac
 from django.utils import six
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 
 from django.contrib import auth
-from django.contrib.auth.hashers import (
-    check_password, make_password, is_password_usable)
 from django.contrib.auth.signals import user_logged_in
 from django.contrib.contenttypes.models import ContentType
 from django.utils.encoding import python_2_unicode_compatible
@@ -152,6 +149,7 @@ class BaseUserManager(models.Manager):
         have "I" or "O" or letters and digits that look similar -- just to
         avoid confusion.
         """
+        from django.utils.crypto import get_random_string
         return get_random_string(length, allowed_chars)
 
     def get_by_natural_key(self, username):
@@ -223,6 +221,7 @@ class AbstractBaseUser(models.Model):
         return True
 
     def set_password(self, raw_password):
+        from django.contrib.auth.hashers import make_password
         self.password = make_password(raw_password)
 
     def check_password(self, raw_password):
@@ -233,13 +232,16 @@ class AbstractBaseUser(models.Model):
         def setter(raw_password):
             self.set_password(raw_password)
             self.save(update_fields=["password"])
+        from django.contrib.auth.hashers import check_password
         return check_password(raw_password, self.password, setter)
 
     def set_unusable_password(self):
         # Sets a value that will never be a valid hash
+        from django.contrib.auth.hashers import make_password
         self.password = make_password(None)
 
     def has_usable_password(self):
+        from django.contrib.auth.hashers import is_password_usable
         return is_password_usable(self.password)
 
     def get_full_name(self):
@@ -253,6 +255,7 @@ class AbstractBaseUser(models.Model):
         Returns an HMAC of the password field.
         """
         key_salt = "django.contrib.auth.models.AbstractBaseUser.get_session_auth_hash"
+        from django.utils.crypto import salted_hmac
         return salted_hmac(key_salt, self.password).hexdigest()
 
 

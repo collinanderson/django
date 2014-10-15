@@ -14,7 +14,6 @@ from django.core.urlresolvers import get_callable
 from django.utils.cache import patch_vary_headers
 from django.utils.encoding import force_text
 from django.utils.http import same_origin
-from django.utils.crypto import constant_time_compare, get_random_string
 
 
 logger = logging.getLogger('django.request')
@@ -35,6 +34,7 @@ def _get_failure_view():
 
 
 def _get_new_csrf_key():
+    from django.utils.crypto import get_random_string
     return get_random_string(CSRF_KEY_LENGTH)
 
 
@@ -182,6 +182,7 @@ class CsrfViewMiddleware(object):
                 # and possible for PUT/DELETE.
                 request_csrf_token = request.META.get('HTTP_X_CSRFTOKEN', '')
 
+            from django.utils.crypto import constant_time_compare
             if not constant_time_compare(request_csrf_token, csrf_token):
                 return self._reject(request, REASON_BAD_TOKEN)
 
