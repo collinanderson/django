@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 
-import cgi
 import codecs
 import logging
 import sys
@@ -101,6 +100,7 @@ class WSGIRequest(http.HttpRequest):
         self.META['PATH_INFO'] = path_info
         self.META['SCRIPT_NAME'] = script_name
         self.method = environ['REQUEST_METHOD'].upper()
+        import cgi
         _, content_params = cgi.parse_header(environ.get('CONTENT_TYPE', ''))
         if 'charset' in content_params:
             try:
