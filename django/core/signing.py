@@ -36,7 +36,6 @@ These functions make use of all of them.
 from __future__ import unicode_literals
 
 import base64
-import json
 import time
 import zlib
 
@@ -86,9 +85,11 @@ class JSONSerializer(object):
     signing.loads.
     """
     def dumps(self, obj):
+        import json
         return json.dumps(obj, separators=(',', ':')).encode('latin-1')
 
     def loads(self, data):
+        import json
         return json.loads(data.decode('latin-1'))
 
 

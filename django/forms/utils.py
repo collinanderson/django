@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 
-import json
 import sys
 
 try:
@@ -54,6 +53,7 @@ class ErrorDict(dict):
         return {f: e.as_data() for f, e in self.items()}
 
     def as_json(self, escape_html=False):
+        import json
         return json.dumps({f: e.get_json_data(escape_html) for f, e in self.items()})
 
     def as_ul(self):
@@ -102,6 +102,7 @@ class ErrorList(UserList, list):
         return errors
 
     def as_json(self, escape_html=False):
+        import json
         return json.dumps(self.get_json_data(escape_html))
 
     def as_ul(self):

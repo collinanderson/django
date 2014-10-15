@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 
 import datetime
-import json
 import re
 import sys
 import time
@@ -10,7 +9,6 @@ from django.conf import settings
 from django.core import signals
 from django.core import signing
 from django.core.exceptions import DisallowedRedirect
-from django.core.serializers.json import DjangoJSONEncoder
 from django.http.cookie import SimpleCookie
 from django.utils import six, timezone
 from django.utils.encoding import force_bytes, force_text, force_str, iri_to_uri
@@ -491,10 +489,13 @@ class JsonResponse(HttpResponse):
       to ``True``.
     """
 
-    def __init__(self, data, encoder=DjangoJSONEncoder, safe=True, **kwargs):
+    def __init__(self, data, encoder=None, safe=True, **kwargs):
+        if not encoder:
+            from django.core.serializers.json import DjangoJSONEncoder as encoder
         if safe and not isinstance(data, dict):
             raise TypeError('In order to allow non-dict objects to be '
                 'serialized set the safe parameter to False')
         kwargs.setdefault('content_type', 'application/json')
+        import json
         data = json.dumps(data, cls=encoder)
         super(JsonResponse, self).__init__(content=data, **kwargs)
