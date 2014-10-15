@@ -10,7 +10,6 @@ import os
 import re
 import sys
 import warnings
-from decimal import Decimal, DecimalException
 from io import BytesIO
 
 from django.core import validators
@@ -307,6 +306,7 @@ class FloatField(IntegerField):
         super(FloatField, self).validate(value)
 
         # Check for NaN (which is the only thing not equal to itself) and +/- infinity
+        from decimal import Decimal
         if value != value or value in (Decimal('Inf'), Decimal('-Inf')):
             raise ValidationError(self.error_messages['invalid'], code='invalid')
 
@@ -352,6 +352,7 @@ class DecimalField(IntegerField):
         if self.localize:
             value = formats.sanitize_separators(value)
         value = smart_text(value).strip()
+        from decimal import Decimal, DecimalException
         try:
             value = Decimal(value)
         except DecimalException:
@@ -365,6 +366,7 @@ class DecimalField(IntegerField):
         # Check for NaN, Inf and -Inf values. We can't compare directly for NaN,
         # since it is never equal to itself. However, NaN is the only value that
         # isn't equal to itself, so we can use this to identify NaN
+        from decimal import Decimal
         if value != value or value == Decimal("Inf") or value == Decimal("-Inf"):
             raise ValidationError(self.error_messages['invalid'], code='invalid')
         sign, digittuple, exponent = value.as_tuple()
@@ -403,6 +405,7 @@ class DecimalField(IntegerField):
     def widget_attrs(self, widget):
         attrs = super(DecimalField, self).widget_attrs(widget)
         if isinstance(widget, NumberInput) and 'step' not in widget.attrs:
+            from decimal import Decimal
             if self.decimal_places is not None:
                 # Use exponential notation for small values since they might
                 # be parsed as 0 otherwise. ref #20765

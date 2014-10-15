@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 
 import codecs
 import datetime
-from decimal import Decimal
 import locale
 
 from django.utils.functional import Promise
@@ -55,16 +54,15 @@ def smart_text(s, encoding='utf-8', strings_only=False, errors='strict'):
     return force_text(s, encoding, strings_only, errors)
 
 
-_PROTECTED_TYPES = six.integer_types + (type(None), float, Decimal,
-    datetime.datetime, datetime.date, datetime.time)
-
-
 def is_protected_type(obj):
     """Determine if the object instance is of a protected type.
 
     Objects of protected types are preserved as-is when passed to
     force_text(strings_only=True).
     """
+    from decimal import Decimal
+    _PROTECTED_TYPES = six.integer_types + (type(None), float, Decimal,
+        datetime.datetime, datetime.date, datetime.time)
     return isinstance(obj, _PROTECTED_TYPES)
 
 

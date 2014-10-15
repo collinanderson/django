@@ -6,7 +6,6 @@ Requires cx_Oracle: http://cx-oracle.sourceforge.net/
 from __future__ import unicode_literals
 
 import datetime
-import decimal
 import re
 import platform
 import sys
@@ -995,6 +994,7 @@ class CursorIterator(six.Iterator):
 def _rowfactory(row, cursor):
     # Cast numeric values as the appropriate Python type based upon the
     # cursor description, and convert strings to unicode.
+    import decimal
     casted = []
     for value, desc in zip(row, cursor.description):
         if value is not None and desc[1] is Database.NUMBER:

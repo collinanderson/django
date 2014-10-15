@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 import collections
 import copy
 import datetime
-import decimal
 import math
 import warnings
 from base64 import b64decode, b64encode
@@ -1523,6 +1522,7 @@ class DecimalField(Field):
         return "DecimalField"
 
     def to_python(self, value):
+        import decimal
         if value is None:
             return value
         try:

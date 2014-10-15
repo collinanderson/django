@@ -7,7 +7,6 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 
 import datetime
-import decimal
 import json
 import sys
 
@@ -86,6 +85,7 @@ class DjangoJSONEncoder(json.JSONEncoder):
     JSONEncoder subclass that knows how to encode date/time and decimal types.
     """
     def default(self, o):
+        import decimal
         # See "Date Time String Format" in the ECMA-262 specification.
         if isinstance(o, datetime.datetime):
             r = o.isoformat()

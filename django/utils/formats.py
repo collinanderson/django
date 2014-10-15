@@ -1,6 +1,5 @@
 from __future__ import absolute_import  # Avoid importing `importlib` from this package.
 
-import decimal
 import datetime
 from importlib import import_module
 import unicodedata
@@ -173,6 +172,7 @@ def localize(value, use_l10n=None):
     If use_l10n is provided and is not None, that will force the value to
     be localized (or not), overriding the value of settings.USE_L10N.
     """
+    import decimal
     if isinstance(value, bool):
         return mark_safe(six.text_type(value))
     elif isinstance(value, (decimal.Decimal, float) + six.integer_types):
@@ -192,6 +192,7 @@ def localize_input(value, default=None):
     Checks if an input value is a localizable type and returns it
     formatted with the appropriate formatting string of the current locale.
     """
+    import decimal
     if isinstance(value, (decimal.Decimal, float) + six.integer_types):
         return number_format(value)
     elif isinstance(value, datetime.datetime):

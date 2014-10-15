@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 
 import re
 import random as random_module
-from decimal import Decimal, InvalidOperation, Context, ROUND_HALF_UP
 from functools import wraps
 from pprint import pformat
 import warnings
@@ -130,6 +129,7 @@ def floatformat(text, arg=-1):
     representation of that value will be displayed.
     """
 
+    from decimal import Decimal, InvalidOperation, Context, ROUND_HALF_UP
     try:
         input_val = force_text(text)
         d = Decimal(input_val)

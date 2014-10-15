@@ -2,7 +2,6 @@ from __future__ import unicode_literals
 
 import datetime
 import inspect
-import decimal
 import collections
 from importlib import import_module
 import os
@@ -246,6 +245,7 @@ class MigrationWriter(object):
         More advanced than repr() as it can encode things
         like datetime.datetime.now.
         """
+        import decimal
         # FIXME: Ideally Promise would be reconstructible, but for now we
         # use force_text on them and defer to the normal string serialization
         # process.

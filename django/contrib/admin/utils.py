@@ -2,7 +2,6 @@ from __future__ import unicode_literals
 
 from collections import defaultdict
 import datetime
-import decimal
 
 from django.contrib.auth import get_permission_codename
 from django.db import models
@@ -383,6 +382,7 @@ def display_for_field(value, field):
 
 
 def display_for_value(value, boolean=False):
+    import decimal
     from django.contrib.admin.templatetags.admin_list import _boolean_icon
     from django.contrib.admin.views.main import EMPTY_CHANGELIST_VALUE
 

@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 
 import datetime
-import decimal
 import hashlib
 import logging
 from time import time
@@ -161,6 +160,7 @@ def typecast_timestamp(s):  # does NOT store time zone information
 
 
 def typecast_decimal(s):
+    import decimal
     if s is None or s == '':
         return None
     return decimal.Decimal(s)
@@ -191,6 +191,7 @@ def format_number(value, max_digits, decimal_places):
     Formats a number into a string with the requisite number of digits and
     decimal places.
     """
+    import decimal
     if isinstance(value, decimal.Decimal):
         context = decimal.getcontext().copy()
         context.prec = max_digits
