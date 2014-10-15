@@ -6,7 +6,6 @@ import re
 import sys
 from io import BytesIO
 from itertools import chain
-from pprint import pformat
 
 from django.conf import settings
 from django.core import signing
@@ -465,6 +464,7 @@ def build_request_repr(request, path_override=None, GET_override=None,
     Builds and returns the request's representation string. The request's
     attributes may be overridden by pre-processed values.
     """
+    from pprint import pformat
     # Since this is called as part of error handling, we need to be very
     # robust against potentially malformed input.
     try:

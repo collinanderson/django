@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 import re
 import random as random_module
 from functools import wraps
-from pprint import pformat
 import warnings
 
 from django.template.base import Variable, Library, VariableDoesNotExist
@@ -966,6 +965,7 @@ def phone2numeric_filter(value):
 @register.filter(is_safe=True)
 def pprint(value):
     """A wrapper around pprint.pprint -- for debugging, really."""
+    from pprint import pformat
     try:
         return pformat(value)
     except Exception as e:
