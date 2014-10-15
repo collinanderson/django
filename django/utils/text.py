@@ -2,7 +2,6 @@ from __future__ import unicode_literals
 
 import re
 import unicodedata
-from gzip import GzipFile
 from io import BytesIO
 import warnings
 
@@ -289,6 +288,7 @@ phone2numeric = allow_lazy(phone2numeric)
 # From http://www.xhaus.com/alan/python/httpcomp.html#gzip
 # Used with permission.
 def compress_string(s):
+    from gzip import GzipFile
     zbuf = BytesIO()
     zfile = GzipFile(mode='wb', compresslevel=6, fileobj=zbuf)
     zfile.write(s)
@@ -317,6 +317,7 @@ class StreamingBuffer(object):
 
 # Like compress_string, but for iterators of strings.
 def compress_sequence(sequence):
+    from gzip import GzipFile
     buf = StreamingBuffer()
     zfile = GzipFile(mode='wb', compresslevel=6, fileobj=buf)
     # Output headers...
