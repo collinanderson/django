@@ -5,7 +5,6 @@ from importlib import import_module
 import unicodedata
 
 from django.conf import settings
-from django.utils import dateformat, numberformat, datetime_safe
 from django.utils.encoding import force_str
 from django.utils.functional import lazy
 from django.utils.safestring import mark_safe
@@ -130,6 +129,7 @@ def date_format(value, format=None, use_l10n=None):
     If use_l10n is provided and is not None, that will force the value to
     be localized (or not), overriding the value of settings.USE_L10N.
     """
+    from django.utils import dateformat
     return dateformat.format(value, get_format(format or 'DATE_FORMAT', use_l10n=use_l10n))
 
 
@@ -140,6 +140,7 @@ def time_format(value, format=None, use_l10n=None):
     If use_l10n is provided and is not None, that will force the value to
     be localized (or not), overriding the value of settings.USE_L10N.
     """
+    from django.utils import dateformat
     return dateformat.time_format(value, get_format(format or 'TIME_FORMAT', use_l10n=use_l10n))
 
 
@@ -154,6 +155,7 @@ def number_format(value, decimal_pos=None, use_l10n=None, force_grouping=False):
         lang = get_language()
     else:
         lang = None
+    from django.utils import numberformat
     return numberformat.format(
         value,
         get_format('DECIMAL_SEPARATOR', lang, use_l10n=use_l10n),
@@ -193,6 +195,7 @@ def localize_input(value, default=None):
     formatted with the appropriate formatting string of the current locale.
     """
     import decimal
+    from django.utils import datetime_safe
     if isinstance(value, (decimal.Decimal, float) + six.integer_types):
         return number_format(value)
     elif isinstance(value, datetime.datetime):

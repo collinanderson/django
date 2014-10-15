@@ -1,13 +1,11 @@
 from __future__ import unicode_literals
 
 import base64
-import calendar
 import datetime
 import re
 import sys
 
 from binascii import Error as BinasciiError
-from email.utils import formatdate
 
 from django.utils.datastructures import MultiValueDict
 from django.utils.encoding import force_bytes, force_str, force_text
@@ -101,6 +99,7 @@ def cookie_date(epoch_seconds=None):
 
     Outputs a string in the format 'Wdy, DD-Mon-YYYY HH:MM:SS GMT'.
     """
+    from email.utils import formatdate
     rfcdate = formatdate(epoch_seconds)
     return '%s-%s-%s GMT' % (rfcdate[:7], rfcdate[8:11], rfcdate[12:25])
 
@@ -116,6 +115,7 @@ def http_date(epoch_seconds=None):
 
     Outputs a string in the format 'Wdy, DD Mon YYYY HH:MM:SS GMT'.
     """
+    from email.utils import formatdate
     return formatdate(epoch_seconds, usegmt=True)
 
 
@@ -150,6 +150,7 @@ def parse_http_date(date):
         min = int(m.group('min'))
         sec = int(m.group('sec'))
         result = datetime.datetime(year, month, day, hour, min, sec)
+        import calendar
         return calendar.timegm(result.utctimetuple())
     except Exception:
         six.reraise(ValueError, ValueError("%r is not a valid date" % date), sys.exc_info()[2])

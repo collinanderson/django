@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 
 from django.core.exceptions import PermissionDenied
-from django.core.mail import send_mail
 from django.core import validators
 from django.db import models
 from django.db.models.manager import EmptyManager
@@ -426,6 +425,7 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
         """
         Sends an email to this User.
         """
+        from django.core.mail import send_mail
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
 

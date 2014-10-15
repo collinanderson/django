@@ -5,7 +5,6 @@ import json
 import re
 import sys
 import time
-from email.header import Header
 
 from django.conf import settings
 from django.core import signals
@@ -183,6 +182,7 @@ class HttpResponseBase(six.Iterator):
         except UnicodeError as e:
             if mime_encode:
                 # Wrapping in str() is a workaround for #12422 under Python 2.
+                from email.header import Header
                 value = str(Header(value, 'utf-8', maxlinelen=sys.maxsize).encode())
             else:
                 e.reason += ', HTTP response headers must be in %s format' % charset

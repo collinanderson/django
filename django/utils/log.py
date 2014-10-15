@@ -5,8 +5,6 @@ import sys
 import warnings
 
 from django.conf import settings
-from django.core import mail
-from django.core.mail import get_connection
 from django.utils.deprecation import RemovedInNextVersionWarning
 from django.utils.encoding import force_text
 from django.utils.module_loading import import_string
@@ -127,11 +125,13 @@ class AdminEmailHandler(logging.Handler):
         message = "%s\n\nRequest repr(): %s" % (self.format(record), request_repr)
         reporter = ExceptionReporter(request, is_email=True, *exc_info)
         html_message = reporter.get_traceback_html() if self.include_html else None
+        from django.core import mail
         mail.mail_admins(subject, message, fail_silently=True,
                          html_message=html_message,
                          connection=self.connection())
 
     def connection(self):
+        from django.core.mail import get_connection
         return get_connection(backend=self.email_backend, fail_silently=True)
 
     def format_subject(self, subject):

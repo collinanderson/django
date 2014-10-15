@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 from collections import OrderedDict
 
 from django import forms
-from django.core.mail import EmailMultiAlternatives
 from django.forms.utils import flatatt
 from django.template import loader
 from django.utils.encoding import force_bytes
@@ -213,6 +212,7 @@ class PasswordResetForm(forms.Form):
         subject = ''.join(subject.splitlines())
         body = loader.render_to_string(email_template_name, context)
 
+        from django.core.mail import EmailMultiAlternatives
         email_message = EmailMultiAlternatives(subject, body, from_email, [to_email])
         if html_email_template_name is not None:
             html_email = loader.render_to_string(html_email_template_name, context)

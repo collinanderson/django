@@ -9,7 +9,6 @@ import warnings
 from django.template.base import Variable, Library, VariableDoesNotExist
 from django.conf import settings
 from django.utils import formats
-from django.utils.dateformat import format, time_format
 from django.utils.deprecation import RemovedInDjango20Warning
 from django.utils.encoding import force_text, iri_to_uri
 from django.utils.html import (conditional_escape, escapejs,
@@ -769,6 +768,7 @@ def date(value, arg=None):
         return formats.date_format(value, arg)
     except AttributeError:
         try:
+            from django.utils.dateformat import format
             return format(value, arg)
         except AttributeError:
             return ''
@@ -785,6 +785,7 @@ def time(value, arg=None):
         return formats.time_format(value, arg)
     except AttributeError:
         try:
+            from django.utils.dateformat import time_format
             return time_format(value, arg)
         except AttributeError:
             return ''
