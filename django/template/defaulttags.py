@@ -19,7 +19,6 @@ from django.template.smartif import IfParser, Literal
 from django.template.defaultfilters import date
 from django.utils.deprecation import RemovedInDjango20Warning
 from django.utils.encoding import force_text, smart_text
-from django.utils.lorem_ipsum import words, paragraphs
 from django.utils.safestring import mark_safe
 from django.utils.html import format_html
 from django.utils import six
@@ -335,6 +334,7 @@ class LoremNode(Node):
         self.count, self.method, self.common = count, method, common
 
     def render(self, context):
+        from django.utils.lorem_ipsum import words, paragraphs
         try:
             count = int(self.count.resolve(context))
         except (ValueError, TypeError):
