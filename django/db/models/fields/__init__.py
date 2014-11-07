@@ -408,7 +408,7 @@ class Field(RegisterLookupMixin):
         # intended to be altered after initial creation.
         obj = copy.copy(self)
         if self.rel:
-            obj.rel = copy.copy(self.rel)
+            obj.rel = obj
             if hasattr(self.rel, 'field') and self.rel.field is self:
                 obj.rel.field = obj
         memodict[id(self)] = obj

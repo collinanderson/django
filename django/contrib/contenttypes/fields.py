@@ -240,12 +240,20 @@ class GenericForeignKey(object):
         setattr(instance, self.cache_attr, value)
 
 
-class GenericRelation(ForeignObject):
+class GenericRel(ForeignObjectRel):
+    def initrel(self, field, to, related_name=None, limit_choices_to=None, related_query_name=None):
+        super(GenericRel, self).initrel(field=field, to=to, related_name=related_query_name or '+',
+                                         limit_choices_to=limit_choices_to, on_delete=DO_NOTHING,
+                                         related_query_name=related_query_name)
+
+
+class GenericRelation(GenericRel, ForeignObject):
     """Provides an accessor to generic related objects (e.g. comments)"""
 
     def __init__(self, to, **kwargs):
         kwargs['verbose_name'] = kwargs.get('verbose_name', None)
-        kwargs['rel'] = GenericRel(
+        kwargs['rel'] = self
+        self.initrel(
             self, to,
             related_query_name=kwargs.pop('related_query_name', None),
             limit_choices_to=kwargs.pop('limit_choices_to', None),
@@ -552,10 +560,3 @@ def create_generic_related_manager(superclass):
         update_or_create.alters_data = True
 
     return GenericRelatedObjectManager
-
-
-class GenericRel(ForeignObjectRel):
-    def __init__(self, field, to, related_name=None, limit_choices_to=None, related_query_name=None):
-        super(GenericRel, self).__init__(field=field, to=to, related_name=related_query_name or '+',
-                                         limit_choices_to=limit_choices_to, on_delete=DO_NOTHING,
-                                         related_query_name=related_query_name)

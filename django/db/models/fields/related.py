@@ -364,7 +364,7 @@ class RelatedField(Field):
         # related object in a table-spanning query. It uses the lower-cased
         # object_name by default, but this can be overridden with the
         # "related_name" option.
-        return self.rel.related_query_name or self.rel.related_name or self.opts.model_name
+        return self.rel._related_query_name or self.rel.related_name or self.opts.model_name
 
 
 class SingleRelatedObjectDescriptor(object):
@@ -1246,33 +1246,10 @@ class ReverseManyRelatedObjectsDescriptor(object):
 
 
 class ForeignObjectRel(object):
-    def __init__(self, field, to, related_name=None, limit_choices_to=None,
-                 parent_link=False, on_delete=None, related_query_name=None):
-        try:
-            to._meta
-        except AttributeError:  # to._meta doesn't exist, so it must be RECURSIVE_RELATIONSHIP_CONSTANT
-            assert isinstance(to, six.string_types), (
-                "'to' must be either a model, a model name or the string %r" % RECURSIVE_RELATIONSHIP_CONSTANT
-            )
-
-        self.field = field
-        self.to = to
-        self.related_name = related_name
-        self.related_query_name = related_query_name
-        self.limit_choices_to = {} if limit_choices_to is None else limit_choices_to
-        self.multiple = True
-        self.parent_link = parent_link
-        self.on_delete = on_delete
 
     def is_hidden(self):
         "Should the related object be hidden?"
         return self.related_name and self.related_name[-1] == '+'
-
-    def get_joining_columns(self):
-        return self.field.get_reverse_joining_columns()
-
-    def get_extra_restriction(self, where_class, alias, related_alias):
-        return self.field.get_extra_restriction(where_class, related_alias, alias)
 
     def set_field_name(self):
         """
@@ -1284,19 +1261,8 @@ class ForeignObjectRel(object):
         # example custom multicolumn joins currently have no remote field).
         self.field_name = None
 
-    def get_lookup_constraint(self, constraint_class, alias, targets, sources, lookup_type,
-                              raw_value):
-        return self.field.get_lookup_constraint(constraint_class, alias, targets, sources,
-                                                lookup_type, raw_value)
-
 
 class ManyToOneRel(ForeignObjectRel):
-    def __init__(self, field, to, field_name, related_name=None, limit_choices_to=None,
-                 parent_link=False, on_delete=None, related_query_name=None):
-        super(ManyToOneRel, self).__init__(
-            field, to, related_name=related_name, limit_choices_to=limit_choices_to,
-            parent_link=parent_link, on_delete=on_delete, related_query_name=related_query_name)
-        self.field_name = field_name
 
     def get_related_field(self):
         """
@@ -1314,33 +1280,10 @@ class ManyToOneRel(ForeignObjectRel):
 
 
 class OneToOneRel(ManyToOneRel):
-    def __init__(self, field, to, field_name, related_name=None, limit_choices_to=None,
-                 parent_link=False, on_delete=None, related_query_name=None):
-        super(OneToOneRel, self).__init__(field, to, field_name,
-                related_name=related_name, limit_choices_to=limit_choices_to,
-                parent_link=parent_link, on_delete=on_delete, related_query_name=related_query_name)
-        self.multiple = False
+    pass
 
 
 class ManyToManyRel(object):
-    def __init__(self, to, related_name=None, limit_choices_to=None,
-                 symmetrical=True, through=None, through_fields=None,
-                 db_constraint=True, related_query_name=None):
-        if through and not db_constraint:
-            raise ValueError("Can't supply a through model and db_constraint=False")
-        if through_fields and not through:
-            raise ValueError("Cannot specify through_fields without a through model")
-        self.to = to
-        self.related_name = related_name
-        self.related_query_name = related_query_name
-        if limit_choices_to is None:
-            limit_choices_to = {}
-        self.limit_choices_to = limit_choices_to
-        self.symmetrical = symmetrical
-        self.multiple = True
-        self.through = through
-        self.through_fields = through_fields
-        self.db_constraint = db_constraint
 
     def is_hidden(self):
         "Should the related object be hidden?"
@@ -1355,25 +1298,32 @@ class ManyToManyRel(object):
         return self.to._meta.pk
 
 
-class ForeignObject(RelatedField):
+class ForeignObject(ForeignObjectRel, RelatedField):
     requires_unique_target = True
     generate_reverse_relation = True
     related_accessor_class = ForeignRelatedObjectsDescriptor
 
     def __init__(self, to, from_fields, to_fields, swappable=True, **kwargs):
+        try:
+            to._meta
+        except AttributeError:  # to._meta doesn't exist, so it must be RECURSIVE_RELATIONSHIP_CONSTANT
+            assert isinstance(to, six.string_types), (
+                "'to' must be either a model, a model name or the string %r" % RECURSIVE_RELATIONSHIP_CONSTANT
+            )
+        assert 'rel' not in kwargs or kwargs['rel'] == self, 'passing in rel is a no-op'
+        self.field = self
+        self.to = to
         self.from_fields = from_fields
         self.to_fields = to_fields
         self.swappable = swappable
-
-        if 'rel' not in kwargs:
-            kwargs['rel'] = ForeignObjectRel(
-                self, to,
-                related_name=kwargs.pop('related_name', None),
-                related_query_name=kwargs.pop('related_query_name', None),
-                limit_choices_to=kwargs.pop('limit_choices_to', None),
-                parent_link=kwargs.pop('parent_link', False),
-                on_delete=kwargs.pop('on_delete', CASCADE),
-            )
+        self.related_name = kwargs.pop('related_name', None)
+        self._related_query_name = kwargs.pop('related_query_name', None)
+        limit_choices_to = kwargs.pop('limit_choices_to', None)
+        self.limit_choices_to = {} if limit_choices_to is None else limit_choices_to
+        self.multiple = True
+        self.parent_link = kwargs.pop('parent_link', False)
+        self.on_delete = kwargs.pop('on_delete', CASCADE)
+        kwargs['rel'] = self
         kwargs['verbose_name'] = kwargs.get('verbose_name', None)
 
         super(ForeignObject, self).__init__(**kwargs)
@@ -1435,8 +1385,8 @@ class ForeignObject(RelatedField):
         kwargs['to_fields'] = self.to_fields
         if self.rel.related_name is not None:
             kwargs['related_name'] = force_text(self.rel.related_name)
-        if self.rel.related_query_name is not None:
-            kwargs['related_query_name'] = self.rel.related_query_name
+        if self.rel._related_query_name is not None:
+            kwargs['related_query_name'] = self.rel._related_query_name
         if self.rel.on_delete != CASCADE:
             kwargs['on_delete'] = self.rel.on_delete
         if self.rel.parent_link:
@@ -1659,15 +1609,16 @@ class ForeignObject(RelatedField):
                 cls._meta.related_fkey_lookups.append(self.rel.limit_choices_to)
 
 
-class ForeignKey(ForeignObject):
+class ForeignKey(ManyToOneRel, ForeignObject):
     empty_strings_allowed = False
     default_error_messages = {
         'invalid': _('%(model)s instance with %(field)s %(value)r does not exist.')
     }
     description = _("Foreign Key (type determined by related field)")
 
-    def __init__(self, to, to_field=None, rel_class=ManyToOneRel,
+    def __init__(self, to, to_field=None, rel_class=None,
                  db_constraint=True, **kwargs):
+        assert not rel_class, 'subclass rel_class instead'
         try:
             to._meta.model_name
         except AttributeError:  # to._meta doesn't exist, so it must be RECURSIVE_RELATIONSHIP_CONSTANT
@@ -1688,16 +1639,9 @@ class ForeignKey(ForeignObject):
             kwargs['db_index'] = True
 
         self.db_constraint = db_constraint
-
-        kwargs['rel'] = rel_class(
-            self, to, to_field,
-            related_name=kwargs.pop('related_name', None),
-            related_query_name=kwargs.pop('related_query_name', None),
-            limit_choices_to=kwargs.pop('limit_choices_to', None),
-            parent_link=kwargs.pop('parent_link', False),
-            on_delete=kwargs.pop('on_delete', CASCADE),
-        )
+        kwargs['rel'] = self
         super(ForeignKey, self).__init__(to, ['self'], [to_field], **kwargs)
+        self.field_name = to_field
 
     def check(self, **kwargs):
         errors = super(ForeignKey, self).check(**kwargs)
@@ -1855,7 +1799,7 @@ class ForeignKey(ForeignObject):
         return {"type": self.db_type(connection), "check": []}
 
 
-class OneToOneField(ForeignKey):
+class OneToOneField(OneToOneRel, ForeignKey):
     """
     A OneToOneField is essentially the same as a ForeignKey, with the exception
     that always carries a "unique" constraint with it and the reverse relation
@@ -1867,7 +1811,8 @@ class OneToOneField(ForeignKey):
 
     def __init__(self, to, to_field=None, **kwargs):
         kwargs['unique'] = True
-        super(OneToOneField, self).__init__(to, to_field, OneToOneRel, **kwargs)
+        super(OneToOneField, self).__init__(to, to_field, **kwargs)
+        self.multiple = False
 
     def deconstruct(self):
         name, path, args, kwargs = super(OneToOneField, self).deconstruct()
@@ -1942,7 +1887,7 @@ def create_many_to_many_intermediary_model(field, klass):
     })
 
 
-class ManyToManyField(RelatedField):
+class ManyToManyField(ManyToManyRel, RelatedField):
     description = _("Many-to-many relationship")
 
     def __init__(self, to, db_constraint=True, swappable=True, **kwargs):
@@ -1959,16 +1904,23 @@ class ManyToManyField(RelatedField):
             to = str(to)
 
         kwargs['verbose_name'] = kwargs.get('verbose_name', None)
-        kwargs['rel'] = ManyToManyRel(to,
-            related_name=kwargs.pop('related_name', None),
-            related_query_name=kwargs.pop('related_query_name', None),
-            limit_choices_to=kwargs.pop('limit_choices_to', None),
-            symmetrical=kwargs.pop('symmetrical', to == RECURSIVE_RELATIONSHIP_CONSTANT),
-            through=kwargs.pop('through', None),
-            through_fields=kwargs.pop('through_fields', None),
-            db_constraint=db_constraint,
-        )
-
+        kwargs['rel'] = self
+        self.to = to
+        self.related_name = kwargs.pop('related_name', None)
+        self._related_query_name = kwargs.pop('related_query_name', None)
+        limit_choices_to = kwargs.pop('limit_choices_to', None)
+        if limit_choices_to is None:
+            limit_choices_to = {}
+        self.limit_choices_to = limit_choices_to
+        self.symmetrical = kwargs.pop('symmetrical', to == RECURSIVE_RELATIONSHIP_CONSTANT)
+        self.multiple = True
+        self.through = kwargs.pop('through', None)
+        self.through_fields = kwargs.pop('through_fields', None)
+        self.db_constraint = db_constraint
+        if self.through and not db_constraint:
+            raise ValueError("Can't supply a through model and db_constraint=False")
+        if self.through_fields and not self.through:
+            raise ValueError("Cannot specify through_fields without a through model")
         self.swappable = swappable
         self.db_table = kwargs.pop('db_table', None)
         if kwargs['rel'].through is not None:
@@ -2226,7 +2178,7 @@ class ManyToManyField(RelatedField):
         if self.rel.related_name is not None:
             kwargs['related_name'] = force_text(self.rel.related_name)
         if self.rel.related_query_name is not None:
-            kwargs['related_query_name'] = self.rel.related_query_name
+            kwargs['related_query_name'] = self.rel._related_query_name
         # Rel needs more work.
         if isinstance(self.rel.to, six.string_types):
             kwargs['to'] = self.rel.to
