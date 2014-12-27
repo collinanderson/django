@@ -30,10 +30,12 @@ What's new in Django 1.9
 Minor features
 ~~~~~~~~~~~~~~
 
+* Generic views generated using ``as_view()`` have ``view_class`` attributes.
+
 :mod:`django.contrib.admin`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* ...
+* Admin views have ``model_admin`` or ``admin_site`` attributes.
 
 :mod:`django.contrib.auth`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
