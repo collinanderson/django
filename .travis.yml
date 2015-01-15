@@ -1,6 +1,6 @@
 language: python
 install:
     - wget https://github.com/django/django/archive/master.tar.gz
-    - tar zxvf master.tar.gz
+    - tar zxf master.tar.gz
 script:
-    - cd tests && PYTHONPATH=.. python3 ./runtests.py --failfast
+    - cd django-master/tests && PYTHONPATH=.. python3 ./runtests.py --failfast
