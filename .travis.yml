@@ -1,6 +1,8 @@
+sudo: false
 language: python
 install:
     - wget https://github.com/django/django/archive/master.tar.gz
     - tar zxf master.tar.gz
+    - pip3 install -r django-master/tests/requirements/py3.txt
 script:
     - cd django-master/tests && PYTHONPATH=.. python3 ./runtests.py --failfast
