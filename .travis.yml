@@ -1,5 +1,8 @@
 sudo: false
 language: python
 python: 3.4
-install: curl -L https://github.com/django/django/archive/master.tar.gz | tar zx
-script: PYTHONPATH=django-master ./django-master/tests/runtests.py --failfast
+install:
+  - pip install coveralls
+  - curl -L https://github.com/django/django/archive/master.tar.gz | tar zx
+script: PYTHONPATH=django-master coverage run --source=django ./django-master/tests/runtests.py --failfast
+after_success: coveralls
