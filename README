@@ -5,4 +5,4 @@ All Branches:
 https://github.com/collinanderson/django/branches/all
 
 Tickets I'm watching:
-https://code.djangoproject.com/query?status=assigned&status=new&cc=~cmawebsite
+https://code.djangoproject.com/query?status=assigned&status=new&cc=~cmawebsite&or&reporter=~collinanderson&status=assigned&status=new
