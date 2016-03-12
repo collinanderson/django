@@ -256,6 +256,10 @@ Internationalization
   :func:`~django.conf.urls.i18n.i18n_patterns` to ``False``, you can allow
   accessing the default language without a URL prefix.
 
+* The parser for ``request.COOKIES`` has been simplified to better match the
+  behavior of browsers. ``request.COOKIES`` may now contain cookies that are
+  invalid according to RFC6265, but are possible to set via document.cookie.
+
 Management Commands
 ~~~~~~~~~~~~~~~~~~~
 

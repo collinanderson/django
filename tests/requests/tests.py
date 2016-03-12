@@ -184,7 +184,7 @@ class RequestsTests(SimpleTestCase):
         self.assertEqual(request.path, "/سلام/")
 
     def test_parse_cookie(self):
-        self.assertEqual(parse_cookie('invalid@key=true'), {})
+        self.assertEqual(parse_cookie('invalid@key=true'), {'invalid@key': 'true'})
 
     def test_httprequest_location(self):
         request = HttpRequest()
