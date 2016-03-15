@@ -708,23 +708,24 @@ class CookieTests(unittest.TestCase):
         Test cases copied from Python's Lib/test/test_http_cookies.py
         """
         self.assertEqual(parse_cookie('chips=ahoy; vienna=finger'), {'chips': 'ahoy', 'vienna': 'finger'})
-        # Here we differ from Python, in that we treat all semicolons as delimiters,
-        # even within quotes.
+        # Here parse_cookie() differs from Python's cookie parsing in that it
+        # treats all semicolons as delimiters, even within quotes.
         self.assertEqual(
             parse_cookie('keebler="E=mc2; L=\\"Loves\\"; fudge=\\012;"'),
             {'keebler': '"E=mc2', 'L': '\\"Loves\\"', 'fudge': '\\012', '': '"'}
         )
-        # Check illegal cookies that have an '=' char in an unquoted value
+        # Illegal cookies that have an '=' char in an unquoted value.
         self.assertEqual(parse_cookie('keebler=E=mc2'), {'keebler': 'E=mc2'})
         # Cookies with ':' character in their name.
         self.assertEqual(parse_cookie('key:term=value:term'), {'key:term': 'value:term'})
-        # Cookies with '[' and ']'
+        # Cookies with '[' and ']'.
         self.assertEqual(parse_cookie('a=b; c=[; d=r; f=h'), {'a': 'b', 'c': '[', 'd': 'r', 'f': 'h'})
 
     def test_cookie_edgecases(self):
-        # Cookies that RFC6265 allows
+        # Cookies that RFC6265 allows.
         self.assertEqual(parse_cookie('a=b; Domain=example.com'), {'a': 'b', 'Domain': 'example.com'})
-        # parse_cookie() has historically only kept the last of cookies with the same name.
+        # parse_cookie() has historically kept only the last cookie with the
+        # same name.
         self.assertEqual(parse_cookie('a=b; h=i; a=c'), {'a': 'c', 'h': 'i'})
 
     def test_invalid_cookies(self):
@@ -732,11 +733,12 @@ class CookieTests(unittest.TestCase):
         Cookie strings that go against RFC6265 but browsers will send if set
         via document.cookie.
         """
-        # Unnamed cookies https://bugzilla.mozilla.org/show_bug.cgi?id=169091
+        # Chunks without an equals sign appear as unnamed values per
+        # https://bugzilla.mozilla.org/show_bug.cgi?id=169091
         self.assertIn('django_language', parse_cookie('abc=def; unnamed; django_language=en').keys())
-        # Yes, even a double quote
+        # Even a double quote may be an unamed value.
         self.assertEqual(parse_cookie('a=b; "; c=d'), {'a': 'b', '': '"', 'c': 'd'})
-        # Spaces in names and values, and equals in values.
+        # Spaces in names and values, and an equals sign in values.
         self.assertEqual(parse_cookie('a b c=d e = f; gh=i'), {'a b c': 'd e = f', 'gh': 'i'})
         # More characters the spec forbids.
         self.assertEqual(parse_cookie('a   b,c<>@:/[]?{}=d  "  =e,f g'), {'a   b,c<>@:/[]?{}': 'd  "  =e,f g'})

@@ -89,13 +89,18 @@ else:
 
 
 def parse_cookie(cookie):
+    """
+    Return a dictionary parsed from a `cookie` string.
+    """
     cookiedict = {}
     if six.PY2:
         cookie = force_str(cookie)
     for chunk in cookie.split(str(';')):
         if str('=') in chunk:
             key, val = chunk.split(str('='), 1)
-        else:  # empty name https://bugzilla.mozilla.org/show_bug.cgi?id=169091
+        else:
+            # Assume an empty name per
+            # https://bugzilla.mozilla.org/show_bug.cgi?id=169091.
             key, val = str(''), chunk
         key, val = key.strip(), val.strip()
         if key or val:
