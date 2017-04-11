@@ -6,3 +6,6 @@ https://github.com/collinanderson/django/branches/all
 
 Tickets I'm watching:
 https://code.djangoproject.com/query?status=!closed&cc=~cmawebsite&or&reporter=~collinanderson&status=!closed
+
+How I checkout a pull request from github:
+git fetch origin pull/NNNN/head && git merge FETCH_HEAD
