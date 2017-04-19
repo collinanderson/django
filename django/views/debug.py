@@ -4,7 +4,6 @@ import sys
 import types
 from pathlib import Path
 
-from django import get_version
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseNotFound
 from django.template import Context, Engine, TemplateDoesNotExist
@@ -283,6 +282,7 @@ class ExceptionReporter:
                     unicode_str[max(start - 5, 0):min(end + 5, len(unicode_str))],
                     'ascii', errors='replace'
                 )
+        from django import get_version
 
         if self.request is None:
             user_str = None
