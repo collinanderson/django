@@ -4,6 +4,7 @@ import sys
 import types
 from pathlib import Path
 
+from django import get_version
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseNotFound
 from django.template import Context, Engine, TemplateDoesNotExist
@@ -281,7 +282,6 @@ class ExceptionReporter:
                     unicode_str[max(start - 5, 0):min(end + 5, len(unicode_str))],
                     'ascii', errors='replace'
                 )
-        from django import get_version
 
         if self.request is None:
             user_str = None
@@ -507,16 +507,8 @@ def default_urlconf(request):
     with Path(CURRENT_DIR, 'templates', 'default_urlconf.html').open() as fh:
         t = DEBUG_ENGINE.from_string(fh.read())
     c = Context({
-        "title": _("Welcome to Django"),
-        "heading": _("It worked!"),
-        "subheading": _("Congratulations on your first Django-powered page."),
-        "instructions": _(
-            "Next, start your first app by running <code>python manage.py startapp [app_label]</code>."
-        ),
-        "explanation": _(
-            "You're seeing this message because you have <code>DEBUG = True</code> in your "
-            "Django settings file and you haven't configured any URLs. Get to work!"
-        ),
+        "version": _('.'.join(get_version().split('.')[:2])),
+        "version": '1.11'  # Hack for now, so we can test links to ensure they're functional.
     })
 
     return HttpResponse(t.render(c), content_type='text/html')

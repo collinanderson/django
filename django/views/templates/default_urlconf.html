@@ -1,44 +1,141 @@
-<!DOCTYPE html>
-<html lang="en"><head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="robots" content="NONE,NOARCHIVE"><title>{{ title }}</title>
-  <style type="text/css">
-    html * { padding:0; margin:0; }
-    body * { padding:10px 20px; }
-    body * * { padding:0; }
-    body { font:small sans-serif; }
-    body>div { border-bottom:1px solid #ddd; }
-    h1 { font-weight:normal; }
-    h2 { margin-bottom:.8em; }
-    h2 span { font-size:80%; color:#666; font-weight:normal; }
-    h3 { margin:1em 0 .5em 0; }
-    h4 { margin:0 0 .5em 0; font-weight: normal; }
-    table { border:1px solid #ccc; border-collapse: collapse; width:100%; background:white; }
-    tbody td, tbody th { vertical-align:top; padding:2px 3px; }
-    thead th {
-      padding:1px 6px 1px 3px; background:#fefefe; text-align:left;
-      font-weight:normal; font-size:11px; border:1px solid #ddd;
-    }
-    tbody th { width:12em; text-align:right; color:#666; padding-right:.5em; }
-    #summary { background: #e0ebff; }
-    #summary h2 { font-weight: normal; color: #666; }
-    #explanation { background:#eee; }
-    #instructions { background:#f6f6f6; }
-    #summary table { border:none; background:transparent; }
-  </style>
-</head>
 
-<body>
-<div id="summary">
-  <h1>{{ heading }}</h1>
-  <h2>{{ subheading }}</h2>
-</div>
-
-<div id="instructions">
-  <p>{{ instructions|safe }}</p>
-</div>
-
-<div id="explanation">
-  <p>{{ explanation|safe }}</p>
-</div>
-</body></html>
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>The Django "It Worked" Install Page</title>
+        <meta name="description" content="Django Install Worked Message">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
+        <style>
+          button,hr,input{overflow:visible}audio,canvas,progress,video{display:inline-block}progress,sub,sup{vertical-align:baseline}[type=checkbox],[type=radio],legend{box-sizing:border-box;padding:0}article,aside,details,figcaption,figure,footer,header,main,menu,nav,section{display:block}body,h4{margin:0}html{font-family:sans-serif;line-height:1.15;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}h1{font-size:2em;margin:.67em 0}figure{margin:1em 40px}hr{box-sizing:content-box;height:0}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}a{background-color:transparent;-webkit-text-decoration-skip:objects;text-decoration:none}a:active,a:hover{outline-width:0}abbr[title]{border-bottom:none;text-decoration:underline;text-decoration:underline dotted}b,strong{font-weight:bolder}dfn{font-style:italic}mark{background-color:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative}sub{bottom:-.25em}sup{top:-.5em}audio:not([controls]){display:none;height:0}img{border-style:none}svg:not(:root){overflow:hidden}button,input,optgroup,select,textarea{font-family:sans-serif;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=reset],[type=submit],button,html [type=button]{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:ButtonText dotted 1px}fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}legend{color:inherit;display:table;max-width:100%;white-space:normal}textarea{overflow:auto}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-cancel-button,[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}body,h2{font-family:Roboto,sans-serif}summary{display:list-item}[hidden],template{display:none}body{padding:0 30px}footer,main{position:absolute;left:50%}footer,header{max-width:920px}.clearfix{clear:both}main{top:50%;transform:translateY(-50%) translateX(-50%);margin-top:-65px;text-align:center}header{margin:0 auto;padding:15px 0;border-bottom:2px solid #efefef}.header__logo a{float:left;font-size:22px;font-weight:700;color:#0C4B33}.header__description a{float:right;font-size:13px;font-weight:400;padding-top:8px;opacity:.8;color:#0C4B33}h2{font-weight:900;font-size:27px;color:#0C4B33;margin:20px 0 5px}h4,p{font-size:14px;color:#859D9A;font-family:Roboto,sans-serif}h4{font-weight:500;line-height:20px}p{font-weight:300;line-height:19px;max-width:350px;margin:35px auto 0}footer{bottom:0;transform:translateX(-50%);width:100%;border-top:2px solid #efefef}footer a{display:block;height:100%}.help__option{float:left;width:33%;padding-top:20px;padding-bottom:30px;border-right:2px solid #efefef}.three{border-right:0}.help__title{font-family:Roboto,sans-serif;font-weight:500;color:#0C4B33;opacity:.8;margin-bottom:3px}.help__subtitle{font-family:Roboto,sans-serif;font-weight:300;font-size:12px;line-height:17px;color:#859D9A}.help__wrap{padding:15px 0 0 25px}.help__info{float:left;max-width:220px;width:auto;padding-left:15px}.help__figure{float:left;background:#859D94;border-radius:100%;padding:7px}@media (max-width:900px){footer,main{position:relative;left:auto;transform:none}main{display:block;top:auto;margin-top:25px;text-align:center}footer{bottom:inherit;max-width:100%;width:100%;margin:60px 0 150px;border-top:2px solid #efefef}.help__wrap{padding:15px 0 0}.help__info{max-width:200px}.help__option{float:none;width:100%;padding-top:30px;padding-bottom:90px;border-right:0;border-bottom:2px solid #efefef}.figure__animation{width:165px!important}.header__description a{font-size:11px;padding-top:10px}h2{font-size:22px;max-width:200px;margin:0 auto;text-align:center}h4{font-size:12px;margin-top:15px}p{font-size:13px;max-width:230px}}@media (max-height: 630px){.figure__animation{width:175px}footer,main{position:relative;left:auto;transform:none}h2{margin-top:0}main{display:block;top:auto;margin-top:50px;text-align:center}footer{bottom:inherit;max-width:920px;width:100%;margin:0 auto;margin-top:70px;border-top:2px solid #efefef}p{margin-bottom:40px}}@media (max-height: 630px) and (max-width:900px){footer{margin-top:0;margin-bottom:150px}main{margin-top:20px}}.cc-cloud{animation:move 1s both infinite ease-in-out;animation-delay:.2s}.cc-cloud-left{animation:moveLeft 1s both infinite ease-in-out;animation-delay:.5s}@keyframes move{0%{transform:translateX(-3px) skewX(0)}100%{transform:translateX(6px) skewX(-2deg)}}@keyframes moveLeft{0%{transform:translateX(3px) skewX(0)}100%{transform:translateX(0) skewX(-2deg)}}.pulse{opacity:.7;animation:pulse 1.9s both infinite ease-in-out}.pulse.one{animation-delay:.1s}.pulse.two{animation-delay:1s}.pulse.three{animation-delay:.9s}.pulse.four{animation-delay:.2s}.pulse.five{animation-delay:.6s;display:none}.pulse.six{animation-delay:1.1s}.pulse.seven{animation-delay:.8s;display:none}.pulse.eight{animation-delay:.3s}.pulse.nine{animation-delay:.5s}.pulse.ten{animation-delay:1.4s}.pulse.eleven{animation-delay:1.1s;display:none}.pulse.twelve{animation-delay:.1s}.pulse.thirteen{animation-delay:0}.pulse.fourteen{animation-delay:.9s}.pulse.fifteen{animation-delay:.4s;display:none}.pulse.sixteen{animation-delay:1.3s;display:none}.pulse.seventeen{animation-delay:.2s}.internal-flame{animation:burnInner .2s both infinite ease-in-out}.external-flame{animation:burnOuter .7s both infinite ease-in-out}.c-cloud{animation:scale .7s both infinite ease-in-out}.c-cloud.one{animation-delay:.4s}.c-cloud.two{animation-delay:.1s}.c-cloud.three{animation-delay:.7s}.c-cloud.four{animation-delay:1s}.c-cloud.five{animation-delay:.2s}.c-cloud.six{animation-delay:.5s}.c-cloud.seven{animation-delay:.4s}.rocket-tip{animation:tip .3s infinite both ease-in-out}@keyframes tip{0%{transform:skew(.3deg)}100%{transform:skew(1deg)}}@keyframes burnInner{0%{transform:scaleY(1) skew(0)}50%{transform:scaleY(1.01) skew(-.29deg)}100%{transform:scaleY(1.02) skew(.29deg)}}@keyframes burnOuter{0%{transform:skew(0)}50%{transform:skew(.35deg)}100%{transform:skew(-.35deg)}}@keyframes scale{0%{transform:scale(1)}50%{transform:scale(1.02)}100%{transform:scale(1.03)}}@keyframes pulse{0%{fill:#859D94;transform:translateY(-5px)}100%{fill:#0C4B33;transform:translateY(15px)}}
+        </style>
+    </head>
+    <body>
+        <header>
+            <div class="header__logo">
+              <a href="https://www.djangoproject.com" target="_blank">Django</a>
+            </div>
+            <div class="header__description">
+              <a href="https://docs.djangoproject.com/en/{{ version }}/releases" target="_blank">View Django {{ version }} Release Notes</a>
+            </div>
+            <div class="header__border clearfix"></div>
+        </header>
+        <main>
+          <div class="figure">
+            <svg class="figure__animation" height="200" viewBox="0 0 128 128" width="200" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="64" cy="64" r="64" fill="#859D94"/>
+              <path fill="#F5F5F5" d="M63 80h2v45h-2z"/>
+              <circle class="cc-cloud-left" cx="54" cy="102" r="9" fill="#F5F5F5"/>
+              <circle cx="64" cy="97" r="9" fill="#F5F5F5"/>
+              <circle class="c-cloud" cx="40" cy="107" r="9" fill="#F5F5F5"/>
+              <circle class="cc-cloud" cx="74" cy="102" r="9" fill="#F5F5F5"/>
+              <circle cx="88" cy="107" r="9" fill="#F5F5F5"/>
+              <path d="M64 112C34.227 112 9.003 94.313.278 69.854 3.236 102.454 30.628 128 64 128s60.764-25.546 63.723-58.146C118.997 94.314 93.773 112 64 112z" fill="#E6E6E6"/>
+              <path class="external-flame" d="M64.167 66.79c-2.775 0-4.578 1.806-4.578 4.58 0 2.773.39 7.787 4.577 10.3 4.187-2.513 4.578-7.525 4.578-10.3 0-2.775-1.802-4.58-4.578-4.58z" fill="#44B78B"/>
+              <path class="internal-flame" d="M64.167 67.936c-1.47 0-2.29.822-2.29 2.29 0 1.47.074 4.394 2.29 5.723 2.216-1.33 2.29-4.254 2.29-5.725 0-1.467-.82-2.29-2.29-2.29z" fill="#0C4B33"/>
+              <ellipse cx="64" cy="60" rx="5" ry="2" fill="#242424"/>
+              <path d="M56.503 21c-2.715 4-4.925 9.41-4.925 14.988C51.578 55.248 57.3 67 57.3 67h13.734s5.722-11.752 5.722-31.012c0-5.277-2.32-10.988-5.128-14.988H56.503z" fill="#99D7BF"/>
+              <path d="M71.628 21h-3.435c2.808 4 5.13 9.71 5.13 14.988C73.322 55.248 67.6 67 67.6 67h3.435s5.722-11.752 5.722-31.012c0-5.277-2.32-10.988-5.13-14.988z" fill="#77CAAA"/>
+              <path d="M57.3 59.843c0 .92-.52 1.693-1.145 2.37l-6.867 8.012c-.625.68-2.29.92-2.29 0v-8.01c0-.922 1.495-1.826 2.29-2.29l6.867-4.577s1.145.225 1.145 1.145v3.35z" fill="#E6E6E6"/>
+              <path d="M56.006 55.348l-1.138.805c.038.1.132.21.132.34v3.35c0 .92-.514 1.694-1.14 2.372l-6.863 8.01c0 .922 1.665.68 2.29 0l6.718-8.01c.625-.678.995-1.45.995-2.37V56.49c0-.922-.994-1.144-.994-1.144z" fill="#CCC"/>
+              <path d="M71.035 59.843c0 .92.52 1.693 1.145 2.37l6.866 8.012c.625.68 2.29.92 2.29 0v-8.01c0-.922-1.495-1.826-2.29-2.29l-6.866-4.577s-1.145.225-1.145 1.145v3.35z" fill="#E6E6E6"/>
+              <path d="M78.878 59.925l-6.784-4.577s-.805.17-1.04.805l5.658 3.772c.796.464 2.288 1.368 2.288 2.29v8.01c1 .68 2 .92 2 0v-8.01c0-.922-1.326-1.826-2.122-2.29z" fill="#CCC"/>
+              <circle cx="64.167" cy="39.324" r="5.723" fill="#263740"/>
+              <circle cx="64.167" cy="39.324" r="4.578" fill="#F5F5F5"/>
+              <circle class="c-cloud one" cx="63" cy="110" r="9" fill="#E6E6E6"/>
+              <circle class="c-cloud two" cx="49" cy="106" r="9" fill="#E6E6E6"/>
+              <path d="M35 102c-4.97 0-9 4.03-9 9 0 2.455.986 4.68 2.58 6.303 1.207.804 2.447 1.56 3.71 2.28.855.27 1.765.417 2.71.417 4.97 0 9-4.03 9-9s-4.03-9-9-9z" fill="#E6E6E6"/>
+              <circle class="c-cloud three" cx="79" cy="106" r="9" fill="#E6E6E6"/>
+              <path d="M93 102c-4.97 0-9 4.03-9 9s4.03 9 9 9c.945 0 1.854-.147 2.71-.417 1.263-.722 2.503-1.478 3.71-2.28 1.594-1.625 2.58-3.848 2.58-6.303 0-4.97-4.03-9-9-9z" fill="#E6E6E6"/>
+              <circle class="c-cloud four" cx="65" cy="110" r="9" fill="#E6E6E6"/>
+              <ellipse cx="64.167" cy="62.214" rx="1.146" ry="9.155" fill="#E6E6E6"/>
+              <path class="rocket-tip" d="M64.167 23.3c2.776 0 5.365-.772 7.588-2.098-2.567-3.945-5.567-6.99-7.588-8.202-2.06 1.236-5.137 4.166-7.735 8.114 2.256 1.378 4.9 2.187 7.735 2.187z" fill="#0C4B33"/>
+              <path class="rocket-tip" d="M68.975 22.49c.977-.336 1.907-.768 2.78-1.288-2.565-3.945-5.565-6.99-7.587-8.202-.654.393-1.417.973-2.228 1.686 2.153 1.818 4.656 4.526 7.035 7.805z" fill="#093726"/>
+              <path class="c-cloud five" d="M98.033 103.538C96.598 102.568 94.863 102 93 102c-.338 0-.67.022-1 .06 1.84.203 3.508.97 4.843 2.11.4-.207.796-.42 1.19-.632z" fill="#CCC"/>
+              <path class="c-cloud six" d="M85.97 105.388c.5-.626 1.085-1.18 1.73-1.65C86.696 99.863 83.19 97 79 97c-.338 0-.67.022-1 .06 4.3.474 7.678 3.976 7.97 8.328z" fill="#CCC"/>
+              <path class="c-cloud seven" d="M55.87 104.52c.46-.595.988-1.132 1.58-1.596C56.19 99.47 52.89 97 49 97c-.338 0-.67.022-1 .06 4.01.442 7.218 3.52 7.87 7.46z" fill="#CCC"/>
+              <path class="c-cloud eight" d="M40.03 105.396c.038-.57.13-1.124.268-1.66C38.81 102.65 36.983 102 35 102c-.338 0-.67.022-1 .06 2.438.268 4.577 1.516 6.03 3.336z" fill="#CCC"/>
+              <path class="pulse one" d="M38 19c0 1-1 2-2 2 1 0 2 1 2 2 0-1 1-2 2-2-1 0-2-1-2-2z" fill="#FFD464"/>
+              <path class="pulse two" d="M35 40c0 1-1 2-2 2 1 0 2 1 2 2 0-1 1-2 2-2-1 0-2-1-2-2z" fill="#FFD464"/>
+              <path class="pulse three" d="M99 86c0 1-1 2-2 2 1 0 2 1 2 2 0-1 1-2 2-2-1 0-2-1-2-2z" fill="#FFD464"/>
+              <path class="pulse seven" d="M94 91c0 1-1 2-2 2 1 0 2 1 2 2 0-1 1-2 2-2-1 0-2-1-2-2z" fill="#FFD464"/>
+              <path class="pulse eight" d="M90 83c0 1-1 2-2 2 1 0 2 1 2 2 0-1 1-2 2-2-1 0-2-1-2-2z" fill="#FFD464"/>
+              <path class="pulse nine" d="M17 29c0 1-1 2-2 2 1 0 2 1 2 2 0-1 1-2 2-2-1 0-2-1-2-2z" fill="#FFD464"/>
+              <path class="pulse ten" d="M92 13c0 1-1 2-2 2 1 0 2 1 2 2 0-1 1-2 2-2-1 0-2-1-2-2z" fill="#FFD464"/>
+              <path class="pulse eleven" d="M49 23c0 1-1 2-2 2 1 0 2 1 2 2 0-1 1-2 2-2-1 0-2-1-2-2z" fill="#FFD464"/>
+              <path class="pulse twelve" d="M57 5c0 1-1 2-2 2 1 0 2 1 2 2 0-1 1-2 2-2-1 0-2-1-2-2z" fill="#FFD464"/>
+              <path class="pulse thirteen" d="M83 48c0 1-1 2-2 2 1 0 2 1 2 2 0-1 1-2 2-2-1 0-2-1-2-2z" fill="#FFD464"/>
+              <path class="pulse fourteen" d="M107 40c0 2-1 3-3 3 2 0 3 1 3 3 0-2 1-3 3-3-2 0-3-1-3-3z" fill="#FFD464"/>
+              <path class="pulse fifteen" d="M99 54c0 3.333-1.667 5-5 5 3.333 0 5 1.667 5 5 0-3.333 1.667-5 5-5-3.333 0-5-1.667-5-5z" fill="#FFD464"/>
+              <path class="pulse sixteen" d="M109 27c0 2-1 3-3 3 2 0 3 1 3 3 0-2 1-3 3-3-2 0-3-1-3-3z" fill="#FFD464"/>
+              <path class="pulse seventeen" d="M99 73c0 2-1 3-3 3 2 0 3 1 3 3 0-2 1-3 3-3-2 0-3-1-3-3z" fill="#FFD464"/>
+              <path class="pulse four" d="M46 13c0 2-1 3-3 3 2 0 3 1 3 3 0-2 1-3 3-3-2 0-3-1-3-3z" fill="#FFD464"/>
+              <path class="pulse five" d="M31 80c0 2-1 3-3 3 2 0 3 1 3 3 0-2 1-3 3-3-2 0-3-1-3-3z" fill="#FFD464"/>
+              <path class="pulse six" d="M19 56c0 2-1 3-3 3 2 0 3 1 3 3 0-2 1-3 3-3-2 0-3-1-3-3z" fill="#FFD464"/>
+            </svg>
+          </div>
+          <div class="main__message">
+              <h2>The install worked! Congrats!</h2>
+              <h4>You've created a project powered by Django {{ version }}!</h4>
+              <a href="https://docs.djangoproject.com/en/{{ version }}/ref/settings/#debug" target="_blank">
+              <p>You see this page because you have DEBUG=True in your settings file and you haven't
+              configured any URLs.</p></a>
+          </div>
+        </main>
+        <footer class="help clearfix">
+          <div class="help__option one">
+            <div class="help__wrap">
+                <a href="https://docs.djangoproject.com/en/{{ version }}" target="_blank">
+                  <div class="help__box">
+                    <svg class="help__figure" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path class="file" d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                    </svg>
+                    <div class="help__info">
+                        <div class="help__title">Django Documentation</div>
+                        <div class="help__subtitle">Everything you need to know about Django;
+                        one of its best features.</div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+          </div>
+          <div class="help__option two">
+              <div class="help__wrap">
+                <a href="https://docs.djangoproject.com/en/{{ version }}/intro/tutorial01" target="_blank">
+                  <div class="help__box">
+                    <svg class="help__figure" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 0h24v24H0V0z" fill="none"/>
+                        <path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/>
+                    </svg>
+                    <div class="help__info">
+                        <div class="help__title">First App Tutorial: Polls</div>
+                        <div class="help__subtitle">In this tutorial, we'll walk through
+                        the creation of a basic poll application.</div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+          </div>
+          <div class="help__option three">
+              <div class="help__wrap">
+                <a href="https://www.djangoproject.com/community" target="_blank">
+                  <div class="help__box">
+                    <svg class="help__figure" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                    </svg>
+                    <div class="help__info">
+                        <div class="help__title">Django Community</div>
+                        <div class="help__subtitle">Django is open source, run by volunteers.
+                        Our community is our greatest resource.</div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+          </div>
+        </footer>
+    </body>
+</html>
