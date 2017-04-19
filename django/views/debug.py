@@ -14,6 +14,7 @@ from django.utils import timezone
 from django.utils.datastructures import MultiValueDict
 from django.utils.encoding import force_text
 from django.utils.module_loading import import_string
+from django.utils.version import get_docs_version
 from django.utils.translation import gettext as _
 
 # Minimal Django templates engine to render the error templates
@@ -507,8 +508,7 @@ def default_urlconf(request):
     with Path(CURRENT_DIR, 'templates', 'default_urlconf.html').open() as fh:
         t = DEBUG_ENGINE.from_string(fh.read())
     c = Context({
-        "version": _('.'.join(get_version().split('.')[:2])),
-        "version": '1.11'  # Hack for now, so we can test links to ensure they're functional.
+        "version": get_docs_version(),
     })
 
     return HttpResponse(t.render(c), content_type='text/html')
