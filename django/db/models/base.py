@@ -500,7 +500,7 @@ class Model(metaclass=ModelBase):
         return new
 
     def __repr__(self):
-        return '<%s: %s>' % (self.__class__.__name__, self)
+        return '<%s %s: %s>' % (self.__class__.__name__, self.pk, self)
 
     def __str__(self):
         return '%s object (%s)' % (self.__class__.__name__, self.pk)
