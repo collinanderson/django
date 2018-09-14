@@ -44,9 +44,11 @@ class CommonMiddleware(MiddlewareMixin):
                     raise PermissionDenied('Forbidden user agent')
 
         # Check for a redirect based on settings.PREPEND_WWW
-        host = request.get_host()
-        must_prepend = settings.PREPEND_WWW and host and not host.startswith('www.')
-        redirect_url = ('%s://www.%s' % (request.scheme, host)) if must_prepend else ''
+        redirect_url = ''
+        if settings.PREPEND_WWW:
+            host = request.get_host()
+            if host and not host.startswith('www.'):
+                redirect_url = '%s://www.%s' % (request.scheme, host)
 
         # Check if a slash should be appended
         if self.should_redirect_with_slash(request):
