@@ -5,7 +5,6 @@ from django.core.exceptions import ImproperlyConfigured
 from django.test import SimpleTestCase
 from django.test.utils import override_settings
 from django.urls import NoReverseMatch, Resolver404, path, resolve, reverse
-from django.utils.deprecation import RemovedInDjango40Warning
 
 from .converters import DynamicConverter
 from .views import empty_view
@@ -313,5 +312,5 @@ class DeprecationTests(SimpleTestCase):
             'django.conf.urls.url() is deprecated in favor of '
             'django.urls.re_path().'
         )
-        with self.assertRaisesMessage(RemovedInDjango40Warning, msg):
+        with self.assertRaisesMessage(PendingDeprecationWarning, msg):
             conf_url(r'^regex/(?P<pk>[0-9]+)/$', empty_view, name='regex')
