@@ -2,8 +2,6 @@ import datetime
 import decimal
 from importlib import import_module
 
-import sqlparse
-
 from django.conf import settings
 from django.db import NotSupportedError, transaction
 from django.db.backends import utils
@@ -337,6 +335,7 @@ class BaseDatabaseOperations:
         cursor.execute() call and PEP 249 doesn't talk about this use case,
         the default implementation is conservative.
         """
+        import sqlparse
         return [
             sqlparse.format(statement, strip_comments=True)
             for statement in sqlparse.split(sql)

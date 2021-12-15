@@ -1,6 +1,5 @@
 from collections import namedtuple
 
-import sqlparse
 from MySQLdb.constants import FIELD_TYPE
 
 from django.db.backends.base.introspection import BaseDatabaseIntrospection
@@ -211,6 +210,7 @@ class DatabaseIntrospection(BaseDatabaseIntrospection):
         return result[0]
 
     def _parse_constraint_columns(self, check_clause, columns):
+        import sqlparse
         check_columns = OrderedSet()
         statement = sqlparse.parse(check_clause)[0]
         tokens = (token for token in statement.flatten() if not token.is_whitespace)
