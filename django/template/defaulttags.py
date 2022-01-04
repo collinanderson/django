@@ -10,7 +10,6 @@ from itertools import groupby
 from django.conf import settings
 from django.utils import timezone
 from django.utils.html import conditional_escape, escape, format_html
-from django.utils.lorem_ipsum import paragraphs, words
 from django.utils.safestring import mark_safe
 
 from .base import (
@@ -329,6 +328,7 @@ class LoremNode(Node):
         self.count, self.method, self.common = count, method, common
 
     def render(self, context):
+        from django.utils.lorem_ipsum import paragraphs, words
         try:
             count = int(self.count.resolve(context))
         except (ValueError, TypeError):

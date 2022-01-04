@@ -6,17 +6,6 @@ import functools
 import os
 import sys
 
-from django.utils import termcolors
-
-try:
-    import colorama
-
-    colorama.init()
-except (ImportError, OSError):
-    HAS_COLORAMA = False
-else:
-    HAS_COLORAMA = True
-
 
 def supports_color():
     """
@@ -46,6 +35,18 @@ def supports_color():
     # isatty is not always implemented, #6223.
     is_a_tty = hasattr(sys.stdout, "isatty") and sys.stdout.isatty()
 
+    if not is_a_tty:
+        return False
+
+    try:
+        import colorama
+
+        colorama.init()
+    except (ImportError, OSError):
+        HAS_COLORAMA = False
+    else:
+        HAS_COLORAMA = True
+
     return is_a_tty and (
         sys.platform != "win32"
         or HAS_COLORAMA
@@ -70,6 +71,7 @@ def make_style(config_string=""):
 
     If config_string is empty django.utils.termcolors.DEFAULT_PALETTE is used.
     """
+    from django.utils import termcolors
 
     style = Style()
 
