@@ -1,7 +1,5 @@
 from collections import namedtuple
 
-import sqlparse
-
 from django.db import DatabaseError
 from django.db.backends.base.introspection import BaseDatabaseIntrospection
 from django.db.backends.base.introspection import FieldInfo as BaseFieldInfo
@@ -167,6 +165,8 @@ class DatabaseIntrospection(BaseDatabaseIntrospection):
         return None
 
     def _parse_column_or_constraint_definition(self, tokens, columns):
+        import sqlparse
+
         token = None
         is_constraint_definition = None
         field_name = None
@@ -269,6 +269,8 @@ class DatabaseIntrospection(BaseDatabaseIntrospection):
     def _parse_table_constraints(self, sql, columns):
         # Check constraint parsing is based of SQLite syntax diagram.
         # https://www.sqlite.org/syntaxdiagrams.html#table-constraint
+        import sqlparse
+
         statement = sqlparse.parse(sql)[0]
         constraints = {}
         unnamed_constrains_index = 0
@@ -403,6 +405,8 @@ class DatabaseIntrospection(BaseDatabaseIntrospection):
         return constraints
 
     def _get_index_columns_orders(self, sql):
+        import sqlparse
+
         tokens = sqlparse.parse(sql)[0]
         for token in tokens:
             if isinstance(token, sqlparse.sql.Parenthesis):
@@ -411,6 +415,8 @@ class DatabaseIntrospection(BaseDatabaseIntrospection):
         return None
 
     def _get_column_collations(self, cursor, table_name):
+        import sqlparse
+
         row = cursor.execute(
             """
             SELECT sql
