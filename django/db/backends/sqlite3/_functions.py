@@ -3,7 +3,6 @@ Implementations of SQL functions for SQLite.
 """
 import functools
 import random
-import statistics
 from datetime import timedelta
 from hashlib import sha1, sha224, sha256, sha384, sha512
 from math import (
@@ -494,16 +493,24 @@ class ListAggregate(list):
 
 
 class StdDevPop(ListAggregate):
-    finalize = statistics.pstdev
+    def finalize(self, *args, **kwargs):
+        import statistics
+        return statistics.pstdev(*args, **kwargs)
 
 
 class StdDevSamp(ListAggregate):
-    finalize = statistics.stdev
+    def finalize(self, *args, **kwargs):
+        import statistics
+        return statistics.stdev(*args, **kwargs)
 
 
 class VarPop(ListAggregate):
-    finalize = statistics.pvariance
+    def finalize(self, *args, **kwargs):
+        import statistics
+        return statistics.pvariance(*args, **kwargs)
 
 
 class VarSamp(ListAggregate):
-    finalize = statistics.variance
+    def finalize(self, *args, **kwargs):
+        import statistics
+        return statistics.variance(*args, **kwargs)
