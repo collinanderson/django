@@ -4,6 +4,22 @@ from django.utils.inspect import func_accepts_kwargs
 from django.utils.itercompat import is_iterable
 
 
+def load_builtin_checks():
+    # Import these to force registration of checks
+    import django.core.checks.async_checks  # NOQA isort:skip
+    import django.core.checks.caches  # NOQA isort:skip
+    import django.core.checks.compatibility.django_4_0  # NOQA isort:skip
+    import django.core.checks.database  # NOQA isort:skip
+    import django.core.checks.files  # NOQA isort:skip
+    import django.core.checks.model_checks  # NOQA isort:skip
+    import django.core.checks.security.base  # NOQA isort:skip
+    import django.core.checks.security.csrf  # NOQA isort:skip
+    import django.core.checks.security.sessions  # NOQA isort:skip
+    import django.core.checks.templates  # NOQA isort:skip
+    import django.core.checks.translation  # NOQA isort:skip
+    import django.core.checks.urls  # NOQA isort:skip
+
+
 class Tags:
     """
     Built-in tags for internal checks.
@@ -105,6 +121,7 @@ class CheckRegistry:
         )
 
     def get_checks(self, include_deployment_checks=False):
+        load_builtin_checks()
         checks = list(self.registered_checks)
         if include_deployment_checks:
             checks.extend(self.deployment_checks)
