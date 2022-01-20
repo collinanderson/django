@@ -159,6 +159,29 @@ class Field(RegisterLookupMixin):
 
     description = property(_description)
 
+    # defaults
+    _verbose_name = None
+    primary_key = False
+    max_length = None
+    _unique = False
+    blank = False
+    null = False
+    remote_field = None
+    is_relation = False
+    default = NOT_PROVIDED
+    editable = True
+    serialize = True
+    unique_for_date = None
+    unique_for_month = None
+    unique_for_year = None
+    choices = None
+    help_text = ""
+    db_index = False
+    db_column = None
+    _db_tablespace = None
+    auto_created = False
+    _error_messages = None
+
     def __init__(
         self,
         verbose_name=None,
@@ -186,26 +209,47 @@ class Field(RegisterLookupMixin):
     ):
         self.name = name
         self.verbose_name = verbose_name  # May be set by set_attributes_from_name
-        self._verbose_name = verbose_name  # Store original for deconstruction
-        self.primary_key = primary_key
-        self.max_length, self._unique = max_length, unique
-        self.blank, self.null = blank, null
-        self.remote_field = rel
-        self.is_relation = self.remote_field is not None
-        self.default = default
-        self.editable = editable
-        self.serialize = serialize
-        self.unique_for_date = unique_for_date
-        self.unique_for_month = unique_for_month
-        self.unique_for_year = unique_for_year
-        if isinstance(choices, collections.abc.Iterator):
-            choices = list(choices)
-        self.choices = choices
-        self.help_text = help_text
-        self.db_index = db_index
-        self.db_column = db_column
-        self._db_tablespace = db_tablespace
-        self.auto_created = auto_created
+        if verbose_name is not None:
+            self._verbose_name = verbose_name  # Store original for deconstruction
+        if primary_key is not False:
+            self.primary_key = primary_key
+        if max_length is not None:
+            self.max_length = max_length
+        if unique is not False:
+            self._unique = unique
+        if blank is not False:
+            self.blank = blank
+        if null is not False:
+            self.null = null
+        if rel is not None:
+            self.remote_field = rel
+            self.is_relation = True
+        if default is not NOT_PROVIDED:
+            self.default = default
+        if editable is not True:
+            self.editable = editable
+        if serialize is not True:
+            self.serialize = serialize
+        if unique_for_date is not None:
+            self.unique_for_date = unique_for_date
+        if unique_for_month is not None:
+            self.unique_for_month = unique_for_month
+        if unique_for_year is not None:
+            self.unique_for_year = unique_for_year
+        if choices is not None:
+            if isinstance(choices, collections.abc.Iterator):
+                choices = list(choices)
+            self.choices = choices
+        if help_text != "":
+            self.help_text = help_text
+        if db_index is not False:
+            self.db_index = db_index
+        if db_column is not None:
+            self.db_column = db_column
+        if db_tablespace is not None:
+            self._db_tablespace = db_tablespace
+        if auto_created is not False:
+            self.auto_created = auto_created
 
         # Adjust the appropriate creation counter, and save our local copy.
         if auto_created:
@@ -221,8 +265,11 @@ class Field(RegisterLookupMixin):
         for c in reversed(self.__class__.__mro__):
             messages.update(getattr(c, "default_error_messages", {}))
         messages.update(error_messages or {})
-        self._error_messages = error_messages  # Store for deconstruction later
+        if error_messages is not None:
+            self._error_messages = error_messages  # Store for deconstruction later
         self.error_messages = messages
+        # import sys; sys.log(' ', self.__class__.__name__)
+        # print(self.__dict__.keys())
 
     def __str__(self):
         """
@@ -833,9 +880,12 @@ class Field(RegisterLookupMixin):
     def set_attributes_from_name(self, name):
         self.name = self.name or name
         self.attname, self.column = self.get_attname_column()
-        self.concrete = self.column is not None
         if self.verbose_name is None and self.name:
             self.verbose_name = self.name.replace("_", " ")
+
+    @property
+    def concrete(self):
+        return self.column is not None
 
     def contribute_to_class(self, cls, name, private_only=False):
         """
@@ -1095,10 +1145,12 @@ class BooleanField(Field):
 
 class CharField(Field):
     description = _("String (up to %(max_length)s)")
+    db_collation = None
 
     def __init__(self, *args, db_collation=None, **kwargs):
         super().__init__(*args, **kwargs)
-        self.db_collation = db_collation
+        if db_collation is not None:
+            self.db_collation = db_collation
         if self.max_length is not None:
             self.validators.append(validators.MaxLengthValidator(self.max_length))
 
