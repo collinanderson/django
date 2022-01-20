@@ -1,4 +1,3 @@
-import cgi
 import codecs
 import copy
 from io import BytesIO
@@ -6,7 +5,6 @@ from itertools import chain
 from urllib.parse import parse_qsl, quote, urlencode, urljoin, urlsplit
 
 from django.conf import settings
-from django.core import signing
 from django.core.exceptions import (
     DisallowedHost,
     ImproperlyConfigured,
@@ -31,6 +29,35 @@ RAISE_ERROR = object()
 host_validation_re = _lazy_re_compile(
     r"^([a-z0-9.-]+|\[[a-f0-9]*:[a-f0-9\.:]+\])(:[0-9]+)?$"
 )
+
+
+def cgi_parseparam(s):  # copied from Python's cgi._parseparam
+    while s[:1] == ";":
+        s = s[1:]
+        end = s.find(";")
+        while end > 0 and (s.count('"', 0, end) - s.count('\\"', 0, end)) % 2:
+            end = s.find(";", end + 1)
+        if end < 0:
+            end = len(s)
+        f = s[:end]
+        yield f.strip()
+        s = s[end:]
+
+
+def cgi_parse_header(line):  # copied from Python's cgi.parse_header
+    parts = cgi_parseparam(";" + line)
+    key = parts.__next__()
+    pdict = {}
+    for p in parts:
+        i = p.find("=")
+        if i >= 0:
+            name = p[:i].strip().lower()
+            value = p[i + 1 :].strip()
+            if len(value) >= 2 and value[0] == value[-1] == '"':
+                value = value[1:-1]
+                value = value.replace("\\\\", "\\").replace('\\"', '"')
+            pdict[name] = value
+    return key, pdict
 
 
 class UnreadablePostError(OSError):
@@ -97,7 +124,7 @@ class HttpRequest:
 
     def _set_content_type_params(self, meta):
         """Set content_type, content_params, and encoding."""
-        self.content_type, self.content_params = cgi.parse_header(
+        self.content_type, self.content_params = cgi_parse_header(
             meta.get("CONTENT_TYPE", "")
         )
         if "charset" in self.content_params:
@@ -179,6 +206,8 @@ class HttpRequest:
         cookie has expired, raise an exception, unless the `default` argument
         is provided,  in which case return that value.
         """
+        from django.core import signing
+
         try:
             cookie_value = self.COOKIES[key]
         except KeyError:

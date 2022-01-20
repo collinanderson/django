@@ -1,5 +1,4 @@
 import os
-import tempfile
 from os.path import abspath, dirname, join, normcase, sep
 from pathlib import Path
 
@@ -41,6 +40,7 @@ def symlinks_supported():
     and/or if they are allowed to be created (e.g. on Windows it requires admin
     permissions).
     """
+    import tempfile
     with tempfile.TemporaryDirectory() as temp_dir:
         original_path = os.path.join(temp_dir, "original")
         symlink_path = os.path.join(temp_dir, "symlink")

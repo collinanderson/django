@@ -21,7 +21,6 @@ from django.utils.translation import gettext_lazy
 from django.views.decorators.cache import never_cache
 from django.views.decorators.common import no_append_slash
 from django.views.decorators.csrf import csrf_protect
-from django.views.i18n import JavaScriptCatalog
 
 all_sites = WeakSet()
 
@@ -378,6 +377,8 @@ class AdminSite:
         `extra_context` is unused but present for consistency with the other
         admin views.
         """
+        from django.views.i18n import JavaScriptCatalog
+
         return JavaScriptCatalog.as_view(packages=["django.contrib.admin"])(request)
 
     def logout(self, request, extra_context=None):

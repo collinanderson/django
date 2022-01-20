@@ -6,7 +6,6 @@ from urllib.parse import urljoin
 from django.conf import settings
 from django.core.exceptions import SuspiciousFileOperation
 from django.core.files import File, locks
-from django.core.files.move import file_move_safe
 from django.core.files.utils import validate_file_name
 from django.core.signals import setting_changed
 from django.utils import timezone
@@ -307,6 +306,8 @@ class FileSystemStorage(Storage):
             try:
                 # This file has a file path that we can move.
                 if hasattr(content, "temporary_file_path"):
+                    from django.core.files.move import file_move_safe
+
                     file_move_safe(content.temporary_file_path(), full_path)
 
                 # This is a normal uploadedfile that we can stream.

@@ -3,7 +3,6 @@ from urllib.parse import unquote, urlsplit, urlunsplit
 from asgiref.local import Local
 
 from django.utils.functional import lazy
-from django.utils.translation import override
 
 from .exceptions import NoReverseMatch, Resolver404
 from .resolvers import _get_cached_resolver, get_ns_resolver, get_resolver
@@ -163,6 +162,7 @@ def translate_url(url, lang_code):
     the `lang_code` language (either by i18n_patterns or by translated regex).
     Return the original URL if no translated version is found.
     """
+    from django.utils.translation import override
     parsed = urlsplit(url)
     try:
         # URL may be encoded.

@@ -11,7 +11,7 @@ from http.client import responses
 from urllib.parse import quote, urlparse
 
 from django.conf import settings
-from django.core import signals, signing
+from django.core import signals
 from django.core.exceptions import DisallowedRedirect
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http.cookie import SimpleCookie
@@ -253,6 +253,8 @@ class HttpResponseBase:
         self.headers.setdefault(key, value)
 
     def set_signed_cookie(self, key, value, salt="", **kwargs):
+        from django.core import signing
+
         value = signing.get_cookie_signer(salt=key + salt).sign(value)
         return self.set_cookie(key, value, **kwargs)
 

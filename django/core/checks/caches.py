@@ -2,7 +2,6 @@ import pathlib
 
 from django.conf import settings
 from django.core.cache import DEFAULT_CACHE_ALIAS, caches
-from django.core.cache.backends.filebased import FileBasedCache
 
 from . import Error, Tags, Warning, register
 
@@ -36,6 +35,9 @@ def check_cache_location_not_exposed(app_configs, **kwargs):
             paths = {pathlib.Path(setting).resolve()}
         for alias in settings.CACHES:
             cache = caches[alias]
+            if not hasattr(cache, '_dir'):
+                continue
+            from django.core.cache.backends.filebased import FileBasedCache
             if not isinstance(cache, FileBasedCache):
                 continue
             cache_path = pathlib.Path(cache._dir).resolve()
@@ -63,6 +65,9 @@ def check_file_based_cache_is_absolute(app_configs, **kwargs):
     errors = []
     for alias, config in settings.CACHES.items():
         cache = caches[alias]
+        if not hasattr(cache, '_dir'):
+            continue
+        from django.core.cache.backends.filebased import FileBasedCache
         if not isinstance(cache, FileBasedCache):
             continue
         if not pathlib.Path(config["LOCATION"]).is_absolute():

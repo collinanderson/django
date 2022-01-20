@@ -6,7 +6,6 @@ file upload handlers for processing.
 """
 import base64
 import binascii
-import cgi
 import collections
 import html
 from urllib.parse import unquote
@@ -22,6 +21,16 @@ from django.utils.datastructures import MultiValueDict
 from django.utils.encoding import force_str
 
 __all__ = ("MultiPartParser", "MultiPartParserError", "InputStreamExhausted")
+
+
+def cgi_valid_boundary(s):  # cgi.valid_boundary
+    import re
+
+    if isinstance(s, bytes):
+        _vb_pattern = b"^[ -~]{0,200}[!-~]$"
+    else:
+        _vb_pattern = "^[ -~]{0,200}[!-~]$"
+    return re.match(_vb_pattern, s)
 
 
 class MultiPartParserError(Exception):
@@ -77,7 +86,7 @@ class MultiPartParser:
                 % force_str(content_type)
             )
         boundary = opts.get("boundary")
-        if not boundary or not cgi.valid_boundary(boundary):
+        if not boundary or not cgi_valid_boundary(boundary):
             raise MultiPartParserError(
                 "Invalid boundary in multipart: %s" % force_str(boundary)
             )
@@ -101,7 +110,7 @@ class MultiPartParser:
         # For compatibility with low-level network APIs (with 32-bit integers),
         # the chunk size should be < 2^31, but still divisible by 4.
         possible_sizes = [x.chunk_size for x in upload_handlers if x.chunk_size]
-        self._chunk_size = min([2**31 - 4] + possible_sizes)
+        self._chunk_size = min([2 ** 31 - 4] + possible_sizes)
 
         self._meta = META
         self._encoding = encoding or settings.DEFAULT_CHARSET

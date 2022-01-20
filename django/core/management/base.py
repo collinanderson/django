@@ -9,7 +9,6 @@ from argparse import ArgumentParser, HelpFormatter
 from io import TextIOBase
 
 import django
-from django.core import checks
 from django.core.exceptions import ImproperlyConfigured
 from django.core.management.color import color_style, no_style
 from django.db import DEFAULT_DB_ALIAS, connections
@@ -463,7 +462,7 @@ class BaseCommand:
         tags=None,
         display_num_errors=False,
         include_deployment_checks=False,
-        fail_level=checks.ERROR,
+        fail_level=None,
         databases=None,
     ):
         """
@@ -472,6 +471,10 @@ class BaseCommand:
         If there are only light messages (like warnings), print them to stderr
         and don't raise an exception.
         """
+        from django.core import checks
+
+        if not fail_level:
+            fail_level = checks.ERROR
         all_issues = checks.run_checks(
             app_configs=app_configs,
             tags=tags,

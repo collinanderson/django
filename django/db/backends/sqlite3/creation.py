@@ -1,5 +1,4 @@
 import os
-import shutil
 import sys
 from pathlib import Path
 
@@ -81,6 +80,7 @@ class DatabaseCreation(BaseDatabaseCreation):
                     self.log("Got an error deleting the old test database: %s" % e)
                     sys.exit(2)
             try:
+                import shutil
                 shutil.copy(source_database_name, target_database_name)
             except Exception as e:
                 self.log("Got an error cloning the test database: %s" % e)

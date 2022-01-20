@@ -9,7 +9,6 @@ from argparse import (
     _SubParsersAction,
 )
 from collections import defaultdict
-from difflib import get_close_matches
 from importlib import import_module
 
 import django
@@ -266,6 +265,7 @@ class ManagementUtility:
                 settings.INSTALLED_APPS
             elif not settings.configured:
                 sys.stderr.write("No Django settings specified.\n")
+            from difflib import get_close_matches
             possible_matches = get_close_matches(subcommand, commands)
             sys.stderr.write("Unknown command: %r" % subcommand)
             if possible_matches:

@@ -6,7 +6,6 @@ from decimal import ROUND_HALF_UP, Context, Decimal, InvalidOperation
 from functools import wraps
 from inspect import unwrap
 from operator import itemgetter
-from pprint import pformat
 from urllib.parse import quote
 
 from django.utils import formats
@@ -17,10 +16,13 @@ from django.utils.html import json_script as _json_script
 from django.utils.html import linebreaks, strip_tags
 from django.utils.html import urlize as _urlize
 from django.utils.safestring import SafeData, mark_safe
-from django.utils.text import Truncator, normalize_newlines, phone2numeric
-from django.utils.text import slugify as _slugify
-from django.utils.text import wrap
-from django.utils.timesince import timesince, timeuntil
+from django.utils.text import (
+    Truncator,
+    normalize_newlines,
+    phone2numeric,
+    slugify as _slugify,
+    wrap,
+)
 from django.utils.translation import gettext, ngettext
 
 from .base import VARIABLE_ATTRIBUTE_SEPARATOR
@@ -788,6 +790,8 @@ def timesince_filter(value, arg=None):
     """Format a date as the time since that date (i.e. "4 days, 6 hours")."""
     if not value:
         return ""
+    from django.utils.timesince import timesince
+
     try:
         if arg:
             return timesince(value, arg)
@@ -801,6 +805,8 @@ def timeuntil_filter(value, arg=None):
     """Format a date as the time until that date (i.e. "4 days, 6 hours")."""
     if not value:
         return ""
+    from django.utils.timesince import timeuntil
+
     try:
         return timeuntil(value, arg)
     except (ValueError, TypeError):
@@ -965,6 +971,8 @@ def phone2numeric_filter(value):
 @register.filter(is_safe=True)
 def pprint(value):
     """A wrapper around pprint.pprint -- for debugging, really."""
+    from pprint import pformat
+
     try:
         return pformat(value)
     except Exception as e:

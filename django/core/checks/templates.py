@@ -2,7 +2,6 @@ import copy
 from collections import defaultdict
 
 from django.conf import settings
-from django.template.backends.django import get_template_tag_modules
 
 from . import Error, Tags, register
 
@@ -49,6 +48,7 @@ def check_string_if_invalid_is_string(app_configs, **kwargs):
 
 @register(Tags.templates)
 def check_for_template_tags_with_the_same_name(app_configs, **kwargs):
+    from django.template.backends.django import get_template_tag_modules
     errors = []
     libraries = defaultdict(list)
 
