@@ -154,16 +154,15 @@ class WhereNode(tree.Node):
         with empty subtree_parents). Childs must be either (Constraint, lookup,
         value) tuples, or objects supporting .clone().
         """
-        clone = self.__class__._new_instance(
-            children=None,
-            connector=self.connector,
-            negated=self.negated,
-        )
+        new_children = []
         for child in self.children:
             if hasattr(child, "clone"):
-                clone.children.append(child.clone())
-            else:
-                clone.children.append(child)
+                child = child.clone()
+            new_children.append(child)
+        clone = self.__class__.__new__(self.__class__)
+        clone.children = new_children
+        clone.negated = self.negated
+        clone.connector = self.connector
         return clone
 
     def relabeled_clone(self, change_map):
