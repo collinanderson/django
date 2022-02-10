@@ -213,22 +213,25 @@ class FlatValuesListIterable(BaseIterable):
 
 class QuerySet:
     """Represent a lazy database lookup for a set of objects."""
+    _result_cache = None
+    _sticky_filter = False
+    _for_write = False
+    _prefetch_related_lookups = ()
+    _prefetch_done = False
+    _iterable_class = ModelIterable
+    _fields = None
+    _defer_next_filter = False
+    _deferred_filter = None
 
     def __init__(self, model=None, query=None, using=None, hints=None):
         self.model = model
         self._db = using
         self._hints = hints or {}
         self._query = query or sql.Query(self.model)
-        self._result_cache = None
-        self._sticky_filter = False
-        self._for_write = False
-        self._prefetch_related_lookups = ()
-        self._prefetch_done = False
-        self._known_related_objects = {}  # {rel_field: {pk: rel_obj}}
-        self._iterable_class = ModelIterable
-        self._fields = None
-        self._defer_next_filter = False
-        self._deferred_filter = None
+
+    @cached_property
+    def _known_related_objects(self):
+        return {}  # {rel_field: {pk: rel_obj}}
 
     @property
     def query(self):
@@ -1618,7 +1621,8 @@ class QuerySet:
         c._sticky_filter = self._sticky_filter
         c._for_write = self._for_write
         c._prefetch_related_lookups = self._prefetch_related_lookups[:]
-        c._known_related_objects = self._known_related_objects
+        if '_known_related_objects' in self.__dict__:
+            c._known_related_objects = self._known_related_objects
         c._iterable_class = self._iterable_class
         c._fields = self._fields
         return c
