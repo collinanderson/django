@@ -161,8 +161,9 @@ class WhereNode(tree.Node):
             new_children.append(child)
         clone = self.__class__.__new__(self.__class__)
         clone.children = new_children
-        clone.negated = self.negated
         clone.connector = self.connector
+        if self.negated:
+            clone.negated = self.negated
         return clone
 
     def relabeled_clone(self, change_map):

@@ -18,12 +18,14 @@ class Node:
     # Standard connector type. Clients usually won't use this at all and
     # subclasses will usually override the value.
     default = "DEFAULT"
+    negated = False
 
     def __init__(self, children=None, connector=None, negated=False):
         """Construct a new Node. If no connector is given, use the default."""
         self.children = children[:] if children else []
         self.connector = connector or self.default
-        self.negated = negated
+        if negated:
+            self.negated = negated
 
     # Required because django.db.models.query_utils.Q. Q. __init__() is
     # problematic, but it is a natural Node subclass in all other respects.
