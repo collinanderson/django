@@ -353,8 +353,7 @@ class Query(BaseExpression):
         obj.used_aliases = self.used_aliases.copy()
         obj._filtered_relations = self._filtered_relations.copy()
         # Clear the cached_property
-        if 'base_table' in obj.__dict__:
-            obj.__dict__.pop('base_table')
+        obj.__dict__.pop('base_table', None)
         return obj
 
     def chain(self, klass=None):
