@@ -235,7 +235,7 @@ class Query(BaseExpression):
         # a result of split_exclude). Correct alias quoting needs to know these
         # aliases too.
         # Map external tables to whether they are aliased.
-        self.external_aliases = {}
+        # self.external_aliases = {}
         self.table_map = {}  # Maps table names to list of aliases.
         self.used_aliases = set()
 
@@ -247,9 +247,17 @@ class Query(BaseExpression):
 
         # These are for extensions. The contents are more or less appended
         # verbatim to the appropriate clause.
-        self.extra = {}  # Maps col_alias -> (col_sql, params).
+        # self.extra = {}  # Maps col_alias -> (col_sql, params).
 
         self._filtered_relations = {}
+
+    @cached_property
+    def external_aliases(self):
+        return {}
+
+    @cached_property
+    def extra(self):
+        return {}
 
     @property
     def output_field(self):
@@ -323,7 +331,8 @@ class Query(BaseExpression):
         # Clone attributes that can't use shallow copy.
         obj.alias_refcount = self.alias_refcount.copy()
         obj.alias_map = self.alias_map.copy()
-        obj.external_aliases = self.external_aliases.copy()
+        if "external_aliases" in self.__dict__:
+            obj.external_aliases = self.external_aliases.copy()
         obj.table_map = self.table_map.copy()
         obj.where = self.where.clone()
         obj.annotations = self.annotations.copy()
@@ -339,7 +348,8 @@ class Query(BaseExpression):
         # It will get re-populated in the cloned queryset the next time it's
         # used.
         obj._annotation_select_cache = None
-        obj.extra = self.extra.copy()
+        if "extra" in self.__dict__:
+            obj.extra = self.extra.copy()
         if self.extra_select_mask is not None:
             obj.extra_select_mask = self.extra_select_mask.copy()
         if self._extra_select_cache is not None:
